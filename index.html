@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Util by mbeiter</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Util</h1>
+        <p>Mike&#39;s utility library is a collection of useful Maven and Java tools.</p>
+
+        <p class="view"><a href="https://github.com/mbeiter/util">View the Project on GitHub <small>mbeiter/util</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/mbeiter/util/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/mbeiter/util/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/mbeiter/util">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="mikes-utility-library" class="anchor" href="#mikes-utility-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mike's Utility Library</h1>
+
+<p>Mike's utility library is a collection of useful Maven and Java tools. </p>
+
+<h2>
+<a id="components-and-usage" class="anchor" href="#components-and-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Components and Usage</h2>
+
+<h3>
+<a id="build-tools" class="anchor" href="#build-tools" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build Tools</h3>
+
+<p>A POM file with a set of Maven profile configurations for reliable and repeatable Maven builds. </p>
+
+<p><strong>Note</strong> that this POM file is not part of the parent / child relationship of the project to keep it isolated from the Maven build(s). This allows it to being used as a configuration dependency without the risk of circular dependencies.</p>
+
+<p>Contents:</p>
+
+<ul>
+<li>Maven license plugin configuration / BSD license file</li>
+<li>Checkstyle rule set configuration</li>
+<li>Findbugs global exclude filter</li>
+<li>PMD rule set configuration</li>
+</ul>
+
+<h4>
+<a id="maven-dependency" class="anchor" href="#maven-dependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>Maven Dependency</h4>
+
+<pre><code>&lt;groupId&gt;org.beiter.michael.util&lt;/groupId&gt;
+&lt;artifactId&gt;build-tools&lt;/artifactId&gt;
+&lt;version&gt;1.0&lt;/version&gt;
+</code></pre>
+
+<h3>
+<a id="util-library-parent" class="anchor" href="#util-library-parent" aria-hidden="true"><span class="octicon octicon-link"></span></a>Util Library Parent</h3>
+
+<p>The utility library parent POM controls the build of the utility library.</p>
+
+<p>Contents:</p>
+
+<ul>
+<li>Maven (build) module version control and configuration
+
+<ul>
+<li>Compiler plugin</li>
+<li>License plugin</li>
+<li>Dependency plugin</li>
+<li>Source plugin</li>
+<li>JXR plugin</li>
+<li>Checkstyle plugin</li>
+<li>Findbugs plugin</li>
+<li>PMD plugin</li>
+<li>Taglist plugin</li>
+<li>Cobertura plugin</li>
+<li>Javadoc plugin</li>
+<li>Surefire plugin</li>
+<li>Project info reports plugin</li>
+<li>Site plugin</li>
+</ul>
+</li>
+<li>Dependency Management: All dependencies for this project have to be listed in a <code>&lt;DependencyManagement&gt;</code> section.</li>
+<li>Organization, licensing, and developer information</li>
+<li>Source control settings</li>
+<li>Issue management settings</li>
+<li>Distribution management settings</li>
+</ul>
+
+<h4>
+<a id="maven-dependency-1" class="anchor" href="#maven-dependency-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Maven Dependency</h4>
+
+<p>See project documentation.</p>
+
+<h4>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h4>
+
+<ul>
+<li>1.0: 
+
+<ul>
+<li><a href="http://mbeiter.github.io/util/docs/1.0/">Maven Project Docs</a></li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="db-library" class="anchor" href="#db-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>DB Library</h3>
+
+<p>The DB library provides common methods for retrieving database connections from either a confiurable connection pool, or from a JNDI resource.</p>
+
+<h4>
+<a id="maven-dependency-2" class="anchor" href="#maven-dependency-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Maven Dependency</h4>
+
+<p>See project documentation.</p>
+
+<h4>
+<a id="documentation-1" class="anchor" href="#documentation-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h4>
+
+<ul>
+<li>1.0: 
+
+<ul>
+<li><a href="http://mbeiter.github.io/util/docs/1.0/db/">Maven Project Docs</a></li>
+<li>
+<a href="http://mbeiter.github.io/util/docs/1.0/db/apidocs/index.html">Java Docs</a> </li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="useful-links" class="anchor" href="#useful-links" aria-hidden="true"><span class="octicon octicon-link"></span></a>Useful Links</h2>
+
+<ul>
+<li><a href="http://www.michael.beiter.org">Mike's Blog</a></li>
+<li><a href="https://github.com/mbeiter/util/issues">GitHub Issue Tracker</a></li>
+<li><a href="https://github.com/mbeiter/util">Source on GitHub</a></li>
+<li><a href="https://github.com/mbeiter/util/blob/master/CHANGELOG.md">Changelog</a></li>
+<li><a href="https://github.com/mbeiter/util/blob/master/CONTRIBUTING.md">How to contribute</a></li>
+<li><a href="https://github.com/mbeiter/util/blob/master/BUILD.md">How to build from source</a></li>
+</ul>
+
+<h2>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h2>
+
+<ul>
+<li><a href="https://github.com/mbeiter" class="user-mention">@mbeiter</a></li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/mbeiter">mbeiter</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
