@@ -9,8 +9,7 @@
 
     <name>build-tools</name>
     <description>
-        The jaas library provides common methods for building JDBC JAAS modules, and
-        an implementation of a JDBC JAAS module.
+        The build tool provide common settings for plugins in derived Maven projects.
     </description>
     <url>http://www.michael.beiter.org/tag/build-tools/</url>
 
