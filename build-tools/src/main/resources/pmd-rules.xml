@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<ruleset name="Custom ruleset">
+
+    <!-- The PMD default rule sets -->
+    <rule ref="rulesets/java/basic.xml"/>
+    <rule ref="rulesets/java/naming.xml"/>
+    <rule ref="rulesets/java/unusedcode.xml"/>
+
+    <!-- Braces -->
+    <rule ref="rulesets/java/braces.xml"/>
+
+    <!-- Clone Implementation -->
+    <rule ref="rulesets/java/clone.xml"/>
+
+    <!-- Code Size -->
+    <rule ref="rulesets/java/codesize.xml"/>
+
+    <!-- Controversial Rules -->
+    <rule ref="rulesets/java/controversial.xml">
+        <exclude name="OnlyOneReturn"/>
+        <exclude name="AtLeastOneConstructor"/>
+        <exclude name="BooleanInversion"/>
+        <exclude name="AvoidFinalLocalVariable"/>
+        <exclude name="AvoidUsingVolatile"/>
+        <exclude name="DataflowAnomalyAnalysis"/>
+    </rule>
+
+    <!-- Coupling -->
+    <rule ref="rulesets/java/coupling.xml">
+        <exclude name="ExcessiveImports"/>
+        <exclude name="LawOfDemeter"/>
+        <exclude name="LoosePackageCoupling"/>
+    </rule>
+
+    <!-- Design -->
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="AvoidDeeplyNestedIfStmts"/>
+        <exclude name="UnnecessaryLocalBeforeReturn"/>
+    </rule>
+
+    <!-- Empty Code -->
+    <rule ref="rulesets/java/empty.xml"/>
+
+    <!-- Finalizers -->
+    <rule ref="rulesets/java/finalizers.xml"/>
+
+    <!-- Imports -->
+    <rule ref="rulesets/java/imports.xml">
+        <exclude name="TooManyStaticImports"/>
+    </rule>
+
+    <!-- J2EE -->
+    <rule ref="rulesets/java/j2ee.xml"/>
+
+    <!-- JavaBeans -->
+    <!-- <rule ref="rulesets/java/javabeans.xml"/> -->
+
+    <!-- Useful if unit tests are checked -->
+    <!-- <rule ref="rulesets/java/junit.xml"/> -->
+
+    <!-- Java Logging -->
+    <rule ref="rulesets/java/logging-java.xml"/>
+
+    <!-- Optimizations -->
+    <rule ref="rulesets/java/optimizations.xml"/>
+
+    <!-- Strict Exception -->
+    <rule ref="rulesets/java/strictexception.xml"/>
+
+    <!-- String and Stringbuffer -->
+    <rule ref="rulesets/java/strings.xml">
+        <exclude name="AvoidDuplicateLiterals"/>
+    </rule>
+
+    <!-- Secure Coding Guidelines -->
+    <rule ref="rulesets/java/sunsecure.xml"/>
+
+    <!-- Type Resolution -->
+    <rule ref="rulesets/java/typeresolution.xml"/>
+
+    <!-- Unnecessary -->
+    <rule ref="rulesets/java/unnecessary.xml"/>
+
+</ruleset>

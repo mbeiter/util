@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.beiter.michael.util</groupId>
+    <artifactId>build-tools</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+
+    <name>build-tools</name>
+    <description>
+        The jaas library provides common methods for building JDBC JAAS modules, and
+        an implementation of a JDBC JAAS module.
+    </description>
+    <url>http://www.michael.beiter.org/tag/build-tools/</url>
+
+    <properties>
+        <!-- build configuration -->
+        <!-- =================== -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- plugin versions -->
+        <!-- =============== -->
+        <!-- http://maven.apache.org/plugins/index.html -->
+        <mavenSourcePluginVersion>2.4</mavenSourcePluginVersion>
+        <mavenJarPluginVersion>2.5</mavenJarPluginVersion>
+        <mavenGpgPluginVersion>1.5</mavenGpgPluginVersion>
+
+        <!-- These properties are overwritten for release builds -->
+        <!-- =================================================== -->
+        <project.maven.compiler.debug>true</project.maven.compiler.debug>
+    </properties>
+
+    <inceptionYear>2014</inceptionYear>
+    <licenses>
+        <license>
+            <name>BSD 3-clause Revised License</name>
+            <url>LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Michael Beiter &lt;michael@beiter.org&gt;</name>
+        <url>http://www.michael.beiter.org</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Mike Beiter</name>
+            <email>michael AT beiter.org</email>
+            <url>http://www.michael.beiter.org</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/mbeiter/util</url>
+        <connection>scm:git:git://github.com/mbeiter/util.git</connection>
+        <developerConnection>scm:git:git@github.com:mbeiter/util.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <!-- ================================================================= -->
+            <!-- Pack and attach sources                                           -->
+            <!-- ================================================================= -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${mavenSourcePluginVersion}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- ===================================================================== -->
+            <!-- Build and attach fake Javadocs                                        -->
+            <!-- ===================================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${mavenJarPluginVersion}</version>
+                <executions>
+                    <execution>
+                        <id>empty-javadoc-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>javadoc</classifier>
+                            <classesDirectory>${basedir}/src/main/javadoc</classesDirectory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- ===================================================================== -->
+            <!-- GnuPG configuration                                                   -->
+            <!-- ===================================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${mavenGpgPluginVersion}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,12 @@
+.idea
+*.iml
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dep_current.txt
+.classpath
+.project
+.settings
