@@ -34,6 +34,16 @@ Or configure a specific identity on a per-repository level (stored in <repo-root
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for pointers on how to contribute.
 
+### Make sure that all new and updated files have the correct license header 
+
+Add / update the license header to all files
+
+    mvn license:update-file-header
+
+To create the project license file
+
+    mvn license:update-project-license
+
 ### Run a Fortify SCA scan
 
 - Run `mvn clean package` (this will create the target folder and resolve + copy all dependencies and sources)
@@ -60,17 +70,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for pointers on how to contribute.
 
 ### Run the Maven build
 
-Add / update the license header to all files
+Check if everything builds without errors and warnings and is ready for a release build (the 'release' profile uses 
+strict static code analysis settings - any pushed code must pass the tests of the 'release' profile)
 
-    mvn license:update-file-header
-
-To create the project license file
-
-    mvn license:update-project-license
-
-Check if everything builds without errors and warnings
-
-    mvn clean install site
+    mvn clean install site -P release
 
 Commit changes to git and push: See (Contribute.md) for hints on how to commit and what to include in commit messages.
 
@@ -87,20 +90,12 @@ project! It is intentionally kept separate to allow referencing it as a build pr
 
 ### Run a Fortify scan (see above)
 
-### Check if everything builds without errors and warnings
+### Build the release bits and site
 
-    mvn clean package site
+    mvn clean install site -P release
 
-### Build the release bits
-
-    mvn clean install -P release
-
-### Build the site
-
-    mvn site
-
-If you get an error message about missing dependencies during site building (e.g. JavaDoc warnings), you forgot to do 
-a `mvn clean install` before building the site.
+If you get an error message about missing dependencies during site building (e.g. JavaDoc warnings), you forgot to also
+do an `install` when building the site.
 
 ### Stage the site 
 

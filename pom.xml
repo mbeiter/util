@@ -21,15 +21,128 @@
 
     <profiles>
         <!-- ================================================================= -->
-        <!-- The release profile builds the code without debug symbols         -->
-        <!-- ================================================================= -->
-        <profile>
+        <!-- The release profile:                                              -->
+        <!--   - Builds the code with static code analysis (SCA)               -->
+        <!--   - Fails the build in case any of the SCA plugins report errors  -->
+        <!--   - Builds Javadocs and fails in case of errors                   -->
+        <!--   - Signs the binaries with gpg (using the default key)           -->
+        <!-- ================================================================= -->        <profile>
             <id>release</id>
-            <properties>
-                <project.maven.compiler.debug>false</project.maven.compiler.debug>
-            </properties>
             <build>
                 <plugins>
+                    <!-- ===================================================================== -->
+                    <!-- SCA: checkstyle                                                       -->
+                    <!-- ===================================================================== -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>${mavenCheckstylePluginVersion}</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.beiter.michael.util</groupId>
+                                <artifactId>build-tools</artifactId>
+                                <version>${buildToolsVersion}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <configLocation>checkstyle.xml</configLocation>
+                                    <encoding>${project.build.sourceEncoding}</encoding>
+                                    <consoleOutput>true</consoleOutput>
+                                    <failsOnError>true</failsOnError>
+                                </configuration>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- ===================================================================== -->
+                    <!-- SCA: Findbugs                                                         -->
+                    <!-- ===================================================================== -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>${findbugsMavenPluginVersion}</version>
+                        <configuration>
+                            <xmlOutput>true</xmlOutput>
+                            <effort>Max</effort>
+                            <threshold>Low</threshold>
+                            <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                            <failOnError>true</failOnError>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.beiter.michael.util</groupId>
+                                <artifactId>build-tools</artifactId>
+                                <version>${buildToolsVersion}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- ================================================================= -->
+                    <!-- SCA: PMD                                                          -->
+                    <!-- ================================================================= -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <version>${mavenPmdPluginVersion}</version>
+                        <configuration>
+                            <linkXref>true</linkXref>
+                            <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                            <minimumTokens>100</minimumTokens>
+                            <targetJdk>${javaVersion}</targetJdk>
+                            <rulesets>
+                                <ruleset>pmd-rules.xml</ruleset>
+                            </rulesets>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.beiter.michael.util</groupId>
+                                <artifactId>build-tools</artifactId>
+                                <version>${buildToolsVersion}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                    <goal>cpd-check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- ===================================================================== -->
+                    <!-- Build and attach Javadocs                                             -->
+                    <!-- ===================================================================== -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${mavenJavadocPluginVersion}</version>
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <failOnError>true</failOnError>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <!-- Do not create test javadocs -->
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!-- ===================================================================== -->
                     <!-- GnuPG configuration                                                   -->
                     <!-- ===================================================================== -->
@@ -320,7 +433,7 @@
                             <configLocation>checkstyle.xml</configLocation>
                             <encoding>${project.build.sourceEncoding}</encoding>
                             <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
+                            <failsOnError>false</failsOnError>
                         </configuration>
                         <goals>
                             <goal>check</goal>
@@ -340,7 +453,7 @@
                     <effort>Max</effort>
                     <threshold>Low</threshold>
                     <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
-                    <failOnError>true</failOnError>
+                    <failOnError>false</failOnError>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -385,8 +498,8 @@
                     <execution>
                         <phase>validate</phase>
                         <goals>
-                            <goal>check</goal>
-                            <goal>cpd-check</goal>
+                            <goal>pmd</goal>
+                            <goal>cpd</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -416,6 +529,7 @@
                 <version>${mavenJavadocPluginVersion}</version>
                 <configuration>
                     <additionalparam>-Xdoclint:none</additionalparam>
+                    <failOnError>false</failOnError>
                 </configuration>
                 <executions>
                     <execution>
@@ -586,6 +700,7 @@
                 <version>${mavenJavadocPluginVersion}</version>
                 <configuration>
                     <additionalparam>-Xdoclint:none</additionalparam>
+                    <failOnError>false</failOnError>
                 </configuration>
                 <reportSets>
                     <reportSet>
