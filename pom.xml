@@ -26,7 +26,8 @@
         <!--   - Fails the build in case any of the SCA plugins report errors  -->
         <!--   - Builds Javadocs and fails in case of errors                   -->
         <!--   - Signs the binaries with gpg (using the default key)           -->
-        <!-- ================================================================= -->        <profile>
+        <!-- ================================================================= -->
+        <profile>
             <id>release</id>
             <build>
                 <plugins>
