@@ -111,7 +111,7 @@ do an `install` when building the site.
 - Update the project start page with a link to the new documentation, and make sure that the link works 
 - Check if the site looks okay on GitHub pages
 
-# Push the bits to Maven central:
+### Push the bits to Maven central:
 
     mvn deploy -P release
     
