@@ -2,7 +2,7 @@
  * #%L
  * This file is part of a universal JDBC Connection factory.
  * %%
- * Copyright (C) 2014 Michael Beiter <michael@beiter.org>
+ * Copyright (C) 2014 - 2015 Michael Beiter <michael@beiter.org>
  * %%
  * All rights reserved.
  * .
