@@ -10,6 +10,11 @@
 
 ### Get the repository from github
 
+If you are building on _**Windows**_, configure git to checkout Windows style line endings and commit Unix-style line 
+endings:
+
+    git config --global core.autocrlf true 
+
 Checkout the master branch from GitHub to a first directory:
 
     git clone git@github.com:mbeiter/util.git
