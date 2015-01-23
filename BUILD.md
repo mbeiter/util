@@ -6,6 +6,15 @@
 - Access to GitHub that allows you cloning of public repositories
 - A working and somewhat current maven installation (tested with Maven 3.2.3)
 
+## Optional:
+
+- A working Fortify installation
+
+#### Install the Fortify Maven plugin
+
+- Go to $FORTIFY_HOME\Samples\advanced\maven-plugin
+- Run `mvn clean install`    
+
 ## Developer build
 
 ### Get the repository from github
@@ -56,8 +65,11 @@ To create the project license file
 
     mvn license:update-project-license
 
-### Run a Fortify SCA scan
+### Run the Maven build
 
+#### Option 1: Build instructions when running the Fortify SCA scan from the Fortify Workbench
+
+- Make sure that everything builds without errors and warnings and is always ready for a release build!
 - Run `mvn clean package` (this will create the target folder and resolve + copy all dependencies and sources)
 - Use the audit workbench, and create a new project in "advanced" mode:
     - Set the target SDK to 1.7
@@ -78,17 +90,31 @@ To create the project license file
         - Show all issues that may have security implications
         - Show all code quality issues
         - Application is a J2EE web application
-        - Application is executed with elevated privileges 
+        - Application is executed with elevated privileges
+- Run the Fortify scan, and make sure to update the translation
+- Run `mvn clean install site -P release` from the project root (the 'release' profile is optional, see below)
 
-### Run the Maven build
+For release builds, all SCA scans must pass without errors and Fortify 'Quick View' must be clean.
 
-Check if everything builds without errors and warnings and is ready for a release build (the 'release' profile uses 
-strict static code analysis settings - any pushed code must pass the tests of the 'release' profile)
+If you get an error message about missing dependencies during site building (e.g. JavaDoc warnings), you forgot to also
+do an `install` when building the site.
 
-    mvn clean install site -P release
+#### Option 2: Build instructions when running the Fortify SCA scan from Maven
 
-Commit changes to git and push: See (Contribute.md) for hints on how to commit and what to include in commit messages.
+Make sure that everything builds without errors and warnings and is always ready for a release build! 
 
+    mvn clean install site -P fortify,release -DFORTIFY_VERSION=4.20
+    mvn com.fortify.ps.maven.plugin:sca-maven-plugin:scan -P fortify -DFORTIFY_VERSION=4.20
+
+- The 'release' profile is optional for developer builds. It uses strict static code analysis settings, and any pushed
+  code must pass the strict SCA settings of the 'release' profile.
+- For release builds, all SCA scans must pass without errors and Fortify 'Quick View' must be clean.
+- If you get an error message about missing dependencies during site building (e.g. JavaDoc warnings), you forgot to also
+  do an `install` when building the site.
+
+### Commit changes to git and push
+
+See (Contribute.md) for hints on how to commit and what to include in commit messages.
 
 ## Release build
 
@@ -100,14 +126,9 @@ Commit changes to git and push: See (Contribute.md) for hints on how to commit a
 **Note** that the version setting will not affect the `build-tools` component, because it is not part of the main Maven 
 project! It is intentionally kept separate to allow referencing it as a build properties root from within the project.
 
-### Run a Fortify scan (see above)
-
 ### Build the release bits and site
 
-    mvn clean install site -P release
-
-If you get an error message about missing dependencies during site building (e.g. JavaDoc warnings), you forgot to also
-do an `install` when building the site.
+See above. Using the "release" profile is mandatory, and the Fortify 'Quick View' must be clean.
 
 ### Stage the site 
 

@@ -164,11 +164,52 @@
                 </plugins>
             </build>
         </profile>
+        <!-- ================================================================= -->
+        <!-- The fortify profile:                                              -->
+        <!--   - Builds the code with fortify static code analysis (SCA)       -->
+        <!--   - Fails the build in case of SCA errors (not findings)          -->
+        <!-- See the project build instructions for information on how to set  -->
+        <!-- up the Fortify SCA plugin in your local Fortify installation      -->
+        <!-- ================================================================= -->
+        <profile>
+            <id>fortify</id>
+            <build>
+                <plugins>
+                    <!-- ===================================================================== -->
+                    <!-- SCA: fortify                                                          -->
+                    <!-- ===================================================================== -->
+                    <plugin>
+                        <groupId>com.fortify.ps.maven.plugin</groupId>
+                        <artifactId>sca-maven-plugin</artifactId>
+                        <version>${FORTIFY_VERSION}</version>
+                        <configuration>
+                            <buildId>util</buildId>
+                            <source>${javaVersion}</source>
+                            <toplevelArtifactId>${toplevelArtifactId}</toplevelArtifactId>
+                            <failOnSCAError>true</failOnSCAError>
+                            <htmlReport>true</htmlReport>
+                            <verbose>true</verbose>
+                            <debug>true</debug>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                    <goal>translate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <properties>
         <!-- build configuration -->
         <!-- =================== -->
+        <toplevelArtifactId>util-parent</toplevelArtifactId>
         <javaVersion>1.7</javaVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <buildToolsVersion>1.0</buildToolsVersion>
