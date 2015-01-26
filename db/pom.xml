@@ -65,6 +65,10 @@
         <developerConnection>scm:git:git@github.com:mbeiter/util.git</developerConnection>
     </scm>
 
+    <!--
+      Required for 'mvn site/ to build the links correctly. Requires the URL of this module to be set to:
+      <url>http://mbeiter.github.io/util/docs/${project.version}/${project.artifactId}/</url>
+    -->
     <distributionManagement>
         <site>
             <id>github.gh-pages</id>
