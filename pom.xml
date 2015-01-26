@@ -25,7 +25,6 @@
         <!--   - Builds the code with static code analysis (SCA)               -->
         <!--   - Fails the build in case any of the SCA plugins report errors  -->
         <!--   - Builds Javadocs and fails in case of errors                   -->
-        <!--   - Signs the binaries with gpg (using the default key)           -->
         <!-- ================================================================= -->
         <profile>
             <id>release</id>
@@ -144,6 +143,17 @@
                             </execution>
                         </executions>
                     </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- ================================================================= -->
+        <!-- The codesigning profile:                                          -->
+        <!--   - Signs the binaries with gpg (using the default key)           -->
+        <!-- ================================================================= -->
+        <profile>
+            <id>codesigning</id>
+            <build>
+                <plugins>
                     <!-- ===================================================================== -->
                     <!-- GnuPG configuration                                                   -->
                     <!-- ===================================================================== -->

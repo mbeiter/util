@@ -126,9 +126,19 @@ See (Contribute.md) for hints on how to commit and what to include in commit mes
 **Note** that the version setting will not affect the `build-tools` component, because it is not part of the main Maven 
 project! It is intentionally kept separate to allow referencing it as a build properties root from within the project.
 
-### Build the release bits and site
+### Build the release bits and site, and push the release bits to Maven Central staging
 
-See above. Using the "release" profile is mandatory, and the Fortify 'Quick View' must be clean.
+Using the "release" profile is mandatory, and the Fortify 'Quick View' must be clean.
+
+The "codesigning" profile is mandatory, as the bits will not be accepted by the upstream repository without a signature.
+
+    mvn clean deploy site -P fortify,release,codesigning -DFORTIFY_VERSION=4.20
+    mvn com.fortify.ps.maven.plugin:sca-maven-plugin:scan -P fortify -DFORTIFY_VERSION=4.20
+
+For automated builds on a single-user machine, it is okay to specify the passphrase of the GPG signing key:
+
+    mvn clean deploy site -P fortify,release,codesigning -Dgpg.passphrase=keyPassphrase -DFORTIFY_VERSION=4.20
+    mvn com.fortify.ps.maven.plugin:sca-maven-plugin:scan -P fortify -DFORTIFY_VERSION=4.20
 
 ### Stage the site 
 
@@ -144,15 +154,9 @@ See above. Using the "release" profile is mandatory, and the Fortify 'Quick View
 - Update the project start page with a link to the new documentation, and make sure that the link works 
 - Check if the site looks okay on GitHub pages
 
-### Push the bits to Maven central:
+### Promote the bits from the staging area to Maven Central
 
-    mvn deploy -P release
-    
-Or (for automated builds on a single-user machine):
-
-    mvn deploy -P release -Dgpg.passphrase=keyPassphrase
-        
-Then go to the [Sonatype staging repo](https://oss.sonatype.org/) and promote the build.
+Go to the [Sonatype staging repo](https://oss.sonatype.org/) and promote the build.
 
 ### Commit release version change to git and tag
 
