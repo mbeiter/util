@@ -48,7 +48,6 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -138,7 +137,7 @@ public final class ConnectionFactory {
 
         // no need for defensive copies of Strings
 
-        final HashMap<String, String> properties = new HashMap<>();
+        final Map<String, String> properties = new ConcurrentHashMap<>();
         properties.put("user", connectionSpec.getUser());
         properties.put("password", connectionSpec.getPassword());
 
