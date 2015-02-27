@@ -51,6 +51,7 @@
                                     <configLocation>checkstyle.xml</configLocation>
                                     <encoding>${project.build.sourceEncoding}</encoding>
                                     <consoleOutput>true</consoleOutput>
+                                    <failOnViolation>true</failOnViolation>
                                     <failsOnError>true</failsOnError>
                                 </configuration>
                                 <goals>
@@ -485,6 +486,7 @@
                             <configLocation>checkstyle.xml</configLocation>
                             <encoding>${project.build.sourceEncoding}</encoding>
                             <consoleOutput>true</consoleOutput>
+                            <failOnViolation>false</failOnViolation>
                             <failsOnError>false</failsOnError>
                         </configuration>
                         <goals>
