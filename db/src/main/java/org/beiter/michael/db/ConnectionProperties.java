@@ -41,125 +41,250 @@ import java.sql.Connection;
  */
 // CHECKSTYLE:OFF
 // this is flagged in checkstyle with a missing whitespace before '}', which is a bug in checkstyle
-// suppress warnings field inits (better to have some explicit clarity what the field defaults in this class are)
 // suppress warnings about the constructor (required for producing java docs)
 // suppress warnings about the number of fields
-// suppress waranings about the long variable names that are "inherited" from Apache DBCP (which I used as a blueprint)
-@SuppressWarnings({"PMD.RedundantFieldInitializer", "PMD.UnnecessaryConstructor", "PMD.TooManyFields", "PMD.LongVariable"})
+// suppress warnings about the long variable names that are "inherited" from Apache DBCP (which I used as a blueprint)
+// suppress warnings about the excessive number of public elements (triggered by the many getters and setters)
+// suppress warnings about a potential God class (not the case, this is triggered by the many getters and setters)
+@SuppressWarnings({"PMD.UnnecessaryConstructor", "PMD.TooManyFields", "PMD.LongVariable", "PMD.ExcessivePublicCount", "PMD.GodClass"})
 // CHECKSTYLE:ON
-
-
-public class ConnectionPoolSpec {
+public class ConnectionProperties {
 
     /**
-     * @see ConnectionPoolSpec#setMaxTotal(int)
+     * @see ConnectionProperties#setDriver(String)
      */
-    private int maxTotal = 8;
+    private String driver;
 
     /**
-     * @see ConnectionPoolSpec#setMaxIdle(int)
+     * @see ConnectionProperties#setUrl(String)
      */
-    private int maxIdle = 8;
+    private String url;
 
     /**
-     * @see ConnectionPoolSpec#setMinIdle(int)
+     * @see ConnectionProperties#setUsername(String)
      */
-    private int minIdle = 0;
+    private String username;
 
     /**
-     * @see ConnectionPoolSpec#setMaxWaitMillis(long)
+     * @see ConnectionProperties#setPassword(String)
      */
-    private long maxWaitMillis = -1;
+    private String password;
 
     /**
-     * @see ConnectionPoolSpec#setTestOnCreate(boolean)
+     * @see ConnectionProperties#setMaxTotal(int)
      */
-    private boolean testOnCreate = false;
+    private int maxTotal;
 
     /**
-     * @see ConnectionPoolSpec#setTestOnBorrow(boolean)
+     * @see ConnectionProperties#setMaxIdle(int)
      */
-    private boolean testOnBorrow = true;
+    private int maxIdle;
 
     /**
-     * @see ConnectionPoolSpec#setTestOnReturn(boolean)
+     * @see ConnectionProperties#setMinIdle(int)
      */
-    private boolean testOnReturn = false;
+    private int minIdle;
 
     /**
-     * @see ConnectionPoolSpec#setTestWhileIdle(boolean)
+     * @see ConnectionProperties#setMaxWaitMillis(long)
      */
-    private boolean testWhileIdle = false;
+    private long maxWaitMillis;
 
     /**
-     * @see ConnectionPoolSpec#setTimeBetweenEvictionRunsMillis(long)
+     * @see ConnectionProperties#setTestOnCreate(boolean)
      */
-    private long timeBetweenEvictionRunsMillis = -1;
+    private boolean testOnCreate;
 
     /**
-     * @see ConnectionPoolSpec#setNumTestsPerEvictionRun(int)
+     * @see ConnectionProperties#setTestOnBorrow(boolean)
      */
-    private int numTestsPerEvictionRun = 3;
+    private boolean testOnBorrow;
 
     /**
-     * @see ConnectionPoolSpec#setMinEvictableIdleTimeMillis(long)
+     * @see ConnectionProperties#setTestOnReturn(boolean)
      */
-    private long minEvictableIdleTimeMillis = 1000 * 60 * 30;
+    private boolean testOnReturn;
 
     /**
-     * @see ConnectionPoolSpec#setSoftMinEvictableIdleTimeMillis(long)
+     * @see ConnectionProperties#setTestWhileIdle(boolean)
      */
-    private long softMinEvictableIdleTimeMillis = -1;
+    private boolean testWhileIdle;
 
     /**
-     * @see ConnectionPoolSpec#setLifo(boolean)
+     * @see ConnectionProperties#setTimeBetweenEvictionRunsMillis(long)
      */
-    private boolean lifo = true;
+    private long timeBetweenEvictionRunsMillis;
 
     /**
-     * @see ConnectionPoolSpec#setDefaultAutoCommit(boolean)
+     * @see ConnectionProperties#setNumTestsPerEvictionRun(int)
      */
-    private boolean defaultAutoCommit = true;
+    private int numTestsPerEvictionRun;
 
     /**
-     * @see ConnectionPoolSpec#setDefaultReadOnly(boolean)
+     * @see ConnectionProperties#setMinEvictableIdleTimeMillis(long)
      */
-    private boolean defaultReadOnly = false;
+    private long minEvictableIdleTimeMillis;
 
     /**
-     * @see ConnectionPoolSpec#setDefaultTransactionIsolation(int)
+     * @see ConnectionProperties#setSoftMinEvictableIdleTimeMillis(long)
      */
-    private int defaultTransactionIsolation = Connection.TRANSACTION_REPEATABLE_READ;
+    private long softMinEvictableIdleTimeMillis;
 
     /**
-     * @see ConnectionPoolSpec#setCacheState(boolean)
+     * @see ConnectionProperties#setLifo(boolean)
      */
-    private boolean cacheState = true;
+    private boolean lifo;
 
     /**
-     * @see ConnectionPoolSpec#setValidationQuery(String)
+     * @see ConnectionProperties#setDefaultAutoCommit(boolean)
      */
-    private String validationQuery = "SELECT 1";
+    private boolean defaultAutoCommit;
 
     /**
-     * @see ConnectionPoolSpec#setMaxConnLifetimeMillis(long)
+     * @see ConnectionProperties#setDefaultReadOnly(boolean)
      */
-    private long maxConnLifetimeMillis = -1;
+    private boolean defaultReadOnly;
 
     /**
-     * Constructs a default connection pool spec, see the setters for the default values being used.
+     * @see ConnectionProperties#setDefaultTransactionIsolation(int)
+     */
+    private int defaultTransactionIsolation;
+
+    /**
+     * @see ConnectionProperties#setCacheState(boolean)
+     */
+    private boolean cacheState;
+
+    /**
+     * @see ConnectionProperties#setValidationQuery(String)
+     */
+    private String validationQuery;
+
+    /**
+     * @see ConnectionProperties#setMaxConnLifetimeMillis(long)
+     */
+    private long maxConnLifetimeMillis;
+
+    /**
+     * Constructs an empty set of connection properties, with most values being set to <code>null</code>, 0, or empty
+     * (depending on the type of the property). Usually this constructor is used if this configuration POJO is populated
+     * in an automated fashion (e.g. injection). If you need to build them manually (possibly with defaults), use or
+     * create a properties builder.
      * <p/>
      * You can change the defaults with the setters. If you need more control over the pool than what is provided by
      * the available setters, consider using a JNDI controlled connection pool instead.
+     *
+     * @see org.beiter.michael.db.propsbuilder.MapBasedConnPropsBuilder#buildDefault()
+     * @see org.beiter.michael.db.propsbuilder.MapBasedConnPropsBuilder#build(java.util.Map)
      */
-    public ConnectionPoolSpec() {
+    public ConnectionProperties() {
 
         // no code here, constructor just for java docs
     }
 
     /**
+     * @return The JDBC database driver class
+     * @see ConnectionProperties#setDriver(String)
+     */
+    public final String getDriver() {
+
+        // no need for defensive copies of String
+
+        return driver;
+    }
+
+    /**
+     * The JDBC database driver class
+     *
+     * @param driver The JDBC database driver class
+     */
+    public final void setDriver(final String driver) {
+
+        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+
+        // no need for defensive copies of boolean
+
+        this.driver = driver;
+    }
+
+    /**
+     * @return The JDBC database URL of the form <code>jdbc:subprotocol:subname</code>
+     * @see ConnectionProperties#setUrl(String)
+     */
+    public final String getUrl() {
+
+        // no need for defensive copies of String
+
+        return url;
+    }
+
+    /**
+     * The JDBC database URL of the form <code>jdbc:subprotocol:subname</code>
+     *
+     * @param url The JDBC database URL
+     */
+    public final void setUrl(final String url) {
+
+        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+
+        // no need for defensive copies of boolean
+
+        this.url = url;
+    }
+
+    /**
+     * @return The username for the connection
+     * @see ConnectionProperties#setUsername(String)
+     */
+    public final String getUsername() {
+
+        // no need for defensive copies of String
+
+        return username;
+    }
+
+    /**
+     * The username for the connection
+     *
+     * @param username The username for the connection
+     */
+    public final void setUsername(final String username) {
+
+        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+
+        // no need for defensive copies of boolean
+
+        this.username = username;
+    }
+
+    /**
+     * @return The password for the connection
+     * @see ConnectionProperties#setUrl(String)
+     */
+    public final String getPassword() {
+
+        // no need for defensive copies of String
+
+        return password;
+    }
+
+    /**
+     * The password for the connection
+     *
+     * @param password The password for the connection
+     */
+    public final void setPassword(final String password) {
+
+        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+
+        // no need for defensive copies of boolean
+
+        this.password = password;
+    }
+
+    /**
      * @return the maximum numbers of active connections
-     * @see ConnectionPoolSpec#setMaxTotal(int)
+     * @see ConnectionProperties#setMaxTotal(int)
      */
     public final int getMaxTotal() {
 
@@ -171,8 +296,6 @@ public class ConnectionPoolSpec {
     /**
      * The maximum number of active connections that can be allocated from this pool at the same time, or negative
      * for no limit.
-     * <p/>
-     * Default: 8
      *
      * @param maxTotal the maximum numbers of active connections
      */
@@ -186,7 +309,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the maximum number of idle connections
-     * @see ConnectionPoolSpec#setMaxIdle(int)
+     * @see ConnectionProperties#setMaxIdle(int)
      */
     public final int getMaxIdle() {
 
@@ -198,8 +321,6 @@ public class ConnectionPoolSpec {
     /**
      * The maximum number of connections that can remain idle in the pool, without extra ones being released, or
      * negative for no limit.
-     * <p/>
-     * Default: 8
      *
      * @param maxIdle the maximum number of idle connections
      */
@@ -213,7 +334,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the minimum number of idle connections
-     * @see ConnectionPoolSpec#setMinIdle(int)
+     * @see ConnectionProperties#setMinIdle(int)
      */
     public final int getMinIdle() {
 
@@ -225,8 +346,6 @@ public class ConnectionPoolSpec {
     /**
      * The minimum number of connections that can remain idle in the pool, without extra ones being created, or zero
      * to create none.
-     * <p/>
-     * Default: 0
      *
      * @param minIdle the minimum number of idle connections
      */
@@ -241,7 +360,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the maximum number of milliseconds that the pool will wait for a connection
-     * @see ConnectionPoolSpec#setMaxWaitMillis(long)
+     * @see ConnectionProperties#setMaxWaitMillis(long)
      */
     public final long getMaxWaitMillis() {
 
@@ -253,8 +372,6 @@ public class ConnectionPoolSpec {
     /**
      * The maximum number of milliseconds that the pool will wait (when there are no available connections) for a
      * connection to be returned before throwing an exception, or -1 to wait indefinitely.
-     * <p/>
-     * Default: -1
      *
      * @param maxWaitMillis the maximum number of milliseconds that the pool will wait for a connection
      */
@@ -269,7 +386,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the indication of whether objects will be validated after creation
-     * @see ConnectionPoolSpec#setTestOnCreate(boolean)
+     * @see ConnectionProperties#setTestOnCreate(boolean)
      */
     public final boolean isTestOnCreate() {
 
@@ -281,8 +398,6 @@ public class ConnectionPoolSpec {
     /**
      * The indication of whether objects will be validated after creation. If the object fails to validate, the borrow
      * attempt that triggered the object creation will fail.
-     * <p/>
-     * Default: false
      *
      * @param testOnCreate the indication of whether objects will be validated after creation
      */
@@ -296,7 +411,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the indication of whether objects will be validated before being borrowed from the pool
-     * @see ConnectionPoolSpec#setTestOnBorrow(boolean)
+     * @see ConnectionProperties#setTestOnBorrow(boolean)
      */
     public final boolean isTestOnBorrow() {
 
@@ -308,8 +423,6 @@ public class ConnectionPoolSpec {
     /**
      * The indication of whether objects will be validated before being borrowed from the pool. If the object fails to
      * validate, it will be dropped from the pool, and we will attempt to borrow another.
-     * <p/>
-     * Default: true
      *
      * @param testOnBorrow the indication of whether objects will be validated before being borrowed from the pool
      */
@@ -323,7 +436,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the indication of whether objects will be validated before being returned to the pool
-     * @see ConnectionPoolSpec#setTestOnReturn(boolean)
+     * @see ConnectionProperties#setTestOnReturn(boolean)
      */
     public final boolean isTestOnReturn() {
 
@@ -334,8 +447,6 @@ public class ConnectionPoolSpec {
 
     /**
      * The indication of whether objects will be validated before being returned to the pool.
-     * <p/>
-     * Default: false
      *
      * @param testOnReturn the indication of whether objects will be validated before being returned to the pool
      */
@@ -349,7 +460,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the indication of whether objects will be validated by the idle object evictor (if any)
-     * @see ConnectionPoolSpec#setTestWhileIdle(boolean)
+     * @see ConnectionProperties#setTestWhileIdle(boolean)
      */
     public final boolean isTestWhileIdle() {
 
@@ -361,8 +472,6 @@ public class ConnectionPoolSpec {
     /**
      * The indication of whether objects will be validated by the idle object evictor (if any). If an object fails
      * to validate, it will be dropped from the pool.
-     * <p/>
-     * Default: false
      *
      * @param testWhileIdle the indication of whether objects will be validated by the idle object evictor (if any)
      */
@@ -376,7 +485,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the number of milliseconds to sleep between runs of the idle object evictor thread
-     * @see ConnectionPoolSpec#setTimeBetweenEvictionRunsMillis(long)
+     * @see ConnectionProperties#setTimeBetweenEvictionRunsMillis(long)
      */
     public final long getTimeBetweenEvictionRunsMillis() {
 
@@ -388,8 +497,6 @@ public class ConnectionPoolSpec {
     /**
      * The number of milliseconds to sleep between runs of the idle object evictor thread. When non-positive, no idle
      * object evictor thread will be run.
-     * <p/>
-     * Default: -1
      *
      * @param timeBetweenEvictionRunsMillis the number of milliseconds to sleep between runs of the idle object evictor
      *                                      thread
@@ -404,7 +511,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return the number of objects to examine during each run of the idle object evictor thread (if any)
-     * @see ConnectionPoolSpec#setNumTestsPerEvictionRun(int)
+     * @see ConnectionProperties#setNumTestsPerEvictionRun(int)
      */
     public final int getNumTestsPerEvictionRun() {
 
@@ -415,8 +522,6 @@ public class ConnectionPoolSpec {
 
     /**
      * The number of objects to examine during each run of the idle object evictor thread (if any).
-     * <p/>
-     * Default: 3
      *
      * @param numTestsPerEvictionRun the number of objects to examine during each run of the idle object evictor thread
      *                               (if any)
@@ -434,7 +539,7 @@ public class ConnectionPoolSpec {
     /**
      * @return the minimum amount of time an object may sit idle in the pool before it is eligable for eviction by the
      * idle object evictor (if any)
-     * @see ConnectionPoolSpec#setMinEvictableIdleTimeMillis(long)
+     * @see ConnectionProperties#setMinEvictableIdleTimeMillis(long)
      */
     public final long getMinEvictableIdleTimeMillis() {
 
@@ -446,8 +551,6 @@ public class ConnectionPoolSpec {
     /**
      * The minimum amount of time an object may sit idle in the pool before it is eligable for eviction by the idle
      * object evictor (if any).
-     * <p/>
-     * Default: 1000 * 60 * 30
      *
      * @param minEvictableIdleTimeMillis minimum amount of time an object may sit idle in the pool before it is
      *                                   eligable for eviction by the idle object evictor (if any).
@@ -464,7 +567,7 @@ public class ConnectionPoolSpec {
     /**
      * @return the minimum amount of time a connection may sit idle in the pool before it is eligible for eviction by
      * the idle connection evictor, with the extra condition that at least "minIdle" connections remain in the pool.
-     * @see ConnectionPoolSpec#setSoftMinEvictableIdleTimeMillis(long)
+     * @see ConnectionProperties#setSoftMinEvictableIdleTimeMillis(long)
      */
     public final long getSoftMinEvictableIdleTimeMillis() {
 
@@ -481,8 +584,6 @@ public class ConnectionPoolSpec {
      * connections are visited by the evictor, idle time is first compared against
      * <code>miniEvictableIdleTimeMillis</code> (without considering the number of idle connections in the pool) and
      * then against <code>softMinEvictableIdleTimeMillis</code>, including the <code>minIdle</code> constraint.
-     * <p/>
-     * Default: -1
      *
      * @param softMinEvictableIdleTimeMillis minimum amount of time a connection may sit idle in the pool before it is
      *                                       eligible for eviction by the idle connection evictor, with the extra
@@ -500,7 +601,7 @@ public class ConnectionPoolSpec {
     /**
      * @return <code>true</code> if the pool returns the most recently used ("last in") connection, <code>false</code>
      * the pool behaves as a FIFO queue
-     * @see ConnectionPoolSpec#setLifo(boolean)
+     * @see ConnectionProperties#setLifo(boolean)
      */
     public final boolean isLifo() {
         return lifo;
@@ -510,8 +611,6 @@ public class ConnectionPoolSpec {
      * <code>True</code> means that the pool returns the most recently used ("last in") connection in the pool (if
      * there are idle connections available). <code>False</code> means that the pool behaves as a FIFO queue -
      * connections are taken from the idle instance pool in the order that they are returned to the pool.
-     * <p/>
-     * Default: true
      *
      * @param lifo <code>true</code> if the pool returns the most recently used ("last in") connection,
      *             <code>false</code> the pool behaves as a FIFO queue
@@ -527,7 +626,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return The default auto-commit state of connections created by the pool
-     * @see ConnectionPoolSpec#setDefaultAutoCommit(boolean)
+     * @see ConnectionProperties#setDefaultAutoCommit(boolean)
      */
     public final boolean isDefaultAutoCommit() {
 
@@ -538,8 +637,6 @@ public class ConnectionPoolSpec {
 
     /**
      * The default auto-commit state of connections created by the pool.
-     * <p/>
-     * Default: true
      *
      * @param defaultAutoCommit The default auto-commit state of connections created by the pool
      */
@@ -554,7 +651,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return The default read-only state of connections created by the pool
-     * @see ConnectionPoolSpec#setDefaultReadOnly(boolean)
+     * @see ConnectionProperties#setDefaultReadOnly(boolean)
      */
     public final boolean isDefaultReadOnly() {
 
@@ -567,8 +664,6 @@ public class ConnectionPoolSpec {
      * The default read-only state of connections created by the pool.
      * <p/>
      * Note that some drivers do not support read only mode.
-     * <p/>
-     * Default: false
      *
      * @param defaultReadOnly The default read-only state of connections created by the pool
      */
@@ -583,7 +678,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return The default TransactionIsolation state of connections created by this pool
-     * @see ConnectionPoolSpec#setDefaultTransactionIsolation(int)
+     * @see ConnectionProperties#setDefaultTransactionIsolation(int)
      */
     public final int getDefaultTransactionIsolation() {
 
@@ -603,7 +698,6 @@ public class ConnectionPoolSpec {
      * <li>Connection.TRANSACTION_REPEATABLE_READ</li>
      * <li>Connection.TRANSACTION_SERIALIZABLE</li>
      * </ul>
-     * Default: Connection.TRANSACTION_REPEATABLE_READ
      *
      * @param defaultTransactionIsolation The default TransactionIsolation state of connections created by this pool
      * @see java.sql.Connection
@@ -627,7 +721,7 @@ public class ConnectionPoolSpec {
     /**
      * @return If <code>true</code>, the pooled connection will cache the current <code>readOnly</code> and
      * <code>autoCommit</code> settings when first read or written and on all subsequent writes
-     * @see ConnectionPoolSpec#setCacheState(boolean)
+     * @see ConnectionProperties#setCacheState(boolean)
      */
     public final boolean isCacheState() {
 
@@ -642,8 +736,6 @@ public class ConnectionPoolSpec {
      * for additional database queries for any further calls to the getter. If the underlying connection is accessed
      * directly and the readOnly and/or <code>autoCommit</code> settings changed the cached values will not reflect the
      * current state. In this case, caching should be disabled by setting this attribute to false.
-     * <p/>
-     * Default: true
      *
      * @param cacheState If <code>true</code>, the pooled connection will cache the current <code>readOnly</code> and
      *                   <code>autoCommit</code> settings when first read or written and on all subsequent writes
@@ -659,7 +751,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return The SQL query that will be used to validate connections from the pool before returning them to the caller
-     * @see ConnectionPoolSpec#setValidationQuery(String)
+     * @see ConnectionProperties#setValidationQuery(String)
      */
     public final String getValidationQuery() {
 
@@ -672,8 +764,6 @@ public class ConnectionPoolSpec {
      * The SQL query that will be used to validate connections from the pool before returning them to the caller. If
      * specified, this query <strong>MUST</strong> be an SQL SELECT statement that returns at least one row. If not
      * specified (i.e. <code>null</code>), connections will be validation by calling the <code>isValid()</code> method.
-     * <p/>
-     * Default: "SELECT 1"
      *
      * @param validationQuery The SQL query that will be used to validate connections from the pool before returning
      *                        them to the caller
@@ -689,7 +779,7 @@ public class ConnectionPoolSpec {
 
     /**
      * @return The maximum lifetime in milliseconds of a connection
-     * @see ConnectionPoolSpec#setMaxConnLifetimeMillis(long)
+     * @see ConnectionProperties#setMaxConnLifetimeMillis(long)
      */
     public final long getMaxConnLifetimeMillis() {
 
@@ -702,8 +792,6 @@ public class ConnectionPoolSpec {
      * The maximum lifetime in milliseconds of a connection. After this time is exceeded the connection will fail the
      * next activation, passivation or validation test. A value of zero or less means the connection has an infinite
      * lifetime.
-     * <p/>
-     * Default: -1
      *
      * @param maxConnLifetimeMillis The maximum lifetime in milliseconds of a connection
      */

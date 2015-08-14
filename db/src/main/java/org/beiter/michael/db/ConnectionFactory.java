@@ -48,9 +48,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * This class creates and manages JDBC Connection instances from:
@@ -115,35 +115,6 @@ public final class ConnectionFactory {
         }
     }
 
-
-    /**
-     * Return a Connection instance from a pool that managed JDBC driver based connections.
-     * <p/>
-     * The driver-based connection are managed in a connection pool.
-     *
-     * @param driver         The JDBC driver class to use
-     * @param connectionSpec The connection spec to use
-     * @param poolSpec       A connection pool spec
-     * @return a JDBC connection
-     * @throws FactoryException When the connection cannot be retrieved from the pool, or the pool cannot be created
-     */
-    public static Connection getConnection(final String driver, final ConnectionSpec connectionSpec,
-                                           final ConnectionPoolSpec poolSpec)
-            throws FactoryException {
-
-        Validate.notBlank(driver);
-        Validate.notNull(connectionSpec);
-        Validate.notNull(poolSpec);
-
-        // no need for defensive copies of Strings
-
-        final Map<String, String> properties = new ConcurrentHashMap<>();
-        properties.put("user", connectionSpec.getUser());
-        properties.put("password", connectionSpec.getPassword());
-
-        return getConnection(driver, connectionSpec.getUrl(), properties, poolSpec);
-    }
-
     /**
      * Return a Connection instance from a pool that manages JDBC driver based connections.
      * <p/>
@@ -152,32 +123,34 @@ public final class ConnectionFactory {
      * username), and can no longer be changed. Subsequent calls to this method will return a connection from the
      * cached pool, and changes in the pool spec (e.g. changes to the size of the pool) will be ignored.
      *
-     * @param driver     The JDBC driver class to use
-     * @param url        The JDBC database URL of the form <code>jdbc:subprotocol:subname</code>
-     * @param properties A list of key/value configuration parameters to pass as connection arguments. Normally at
-     *                   least a "user" and "password" property should be included
-     * @param poolSpec   A connection pool spec
+     * @param poolSpec   A connection pool spec that has the driver and url configured as non-empty strings
      * @return a JDBC connection
      * @throws FactoryException When the connection cannot be retrieved from the pool, or the pool cannot be created
      */
-    public static Connection getConnection(final String driver, final String url, final Map<String, String> properties,
-                                           final ConnectionPoolSpec poolSpec)
+    public static Connection getConnection(final ConnectionProperties poolSpec)
             throws FactoryException {
 
-        Validate.notBlank(driver);
-        Validate.notBlank(url);
-        Validate.notNull(properties);
         Validate.notNull(poolSpec);
+        Validate.notBlank(poolSpec.getDriver());
+        Validate.notBlank(poolSpec.getUrl());
 
         // no need for defensive copies of Strings
+
+        final String driver = poolSpec.getDriver();
+        final String url = poolSpec.getUrl();
+        // CHECKSTYLE:OFF
+        // this particular set of inline conditions is easy to read :-)
+        final String username = poolSpec.getUsername() == null ? "" : poolSpec.getUsername();
+        final String password = poolSpec.getPassword() == null ? "" : poolSpec.getPassword();
+        // CHECKSTYLE:OFF
 
         // Load the database driver (if not already done)
         loadDriver(driver);
 
-        // CHECKSTYLE:OFF
-        // this particular set of inline conditions is easy to read :-)
-        final String username = properties.get("user") == null ? "" : properties.get("user");
-        // CHECKSTYLE:OFF
+        // create the hash map required for the connection pool username + password
+        final ConcurrentMap<String, String> properties = new ConcurrentHashMap<>();
+        properties.put("user", username);
+        properties.put("password", password);
 
         // we keep a separate pool per connection
         // a connection is identified by the URL, the username, and the password
@@ -260,8 +233,8 @@ public final class ConnectionFactory {
      * @return A pooled database connection
      */
     private static PoolingDataSource<PoolableConnection> getPoolingDataSource(final String url,
-                                                                              final Map<String, String> properties,
-                                                                              final ConnectionPoolSpec poolSpec) {
+                                                                              final ConcurrentMap<String, String> properties,
+                                                                              final ConnectionProperties poolSpec) {
 
         // assert in private method
         assert url != null : "The url cannot be null";

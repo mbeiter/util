@@ -32,6 +32,7 @@
  */
 package org.beiter.michael.db;
 
+import org.beiter.michael.db.propsbuilder.MapBasedConnPropsBuilder;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -98,11 +99,15 @@ public class ConnectionFactoryDirectTest {
     @Test(expected = NullPointerException.class)
     public void directConstructorNullDriverTest() {
 
-        ConnectionSpec connSpec = new ConnectionSpec(URL, USER, PASSWORD);
-        ConnectionPoolSpec poolSpec = new ConnectionPoolSpec();
+        // Using the properties builder instead of
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver(null);
+        connProps.setUrl(URL);
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
 
         try {
-            ConnectionFactory.getConnection(null, connSpec, poolSpec);
+            ConnectionFactory.getConnection(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -111,17 +116,21 @@ public class ConnectionFactoryDirectTest {
     }
 
     /**
-     * Test that the direct factory method does not accept a null connection spec
+     * Test that the direct factory method does not accept a null url
      *
      * @throws NullPointerException When a null connection spec is provided
      */
     @Test(expected = NullPointerException.class)
     public void directConstructorNullConnSpecTest() {
 
-        ConnectionPoolSpec poolSpec = new ConnectionPoolSpec();
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver(DRIVER);
+        connProps.setUrl(null);
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
 
         try {
-            ConnectionFactory.getConnection(DRIVER, null, poolSpec);
+            ConnectionFactory.getConnection(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -135,12 +144,12 @@ public class ConnectionFactoryDirectTest {
      * @throws NullPointerException When a null connection pool spec is provided
      */
     @Test(expected = NullPointerException.class)
-    public void directConstructorNullPoolSpecTest() {
+    public void directConstructorNullconnPropsTest() {
 
-        ConnectionSpec connSpec = new ConnectionSpec(URL, USER, PASSWORD);
-
+        ConnectionProperties connProps = null;
+        
         try {
-            ConnectionFactory.getConnection(DRIVER, connSpec, null);
+            ConnectionFactory.getConnection(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -156,11 +165,37 @@ public class ConnectionFactoryDirectTest {
     @Test(expected = IllegalArgumentException.class)
     public void directConstructorEmptyDriverTest() {
 
-        ConnectionSpec connSpec = new ConnectionSpec(URL, USER, PASSWORD);
-        ConnectionPoolSpec poolSpec = new ConnectionPoolSpec();
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver("");
+        connProps.setUrl(URL);
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
 
         try {
-            ConnectionFactory.getConnection("", connSpec, poolSpec);
+            ConnectionFactory.getConnection(connProps);
+        } catch (FactoryException e) {
+            AssertionError ae = new AssertionError("Factory error");
+            ae.initCause(e);
+            throw ae;
+        }
+    }
+
+    /**
+     * Test that the direct factory method does not accept an empty url
+     *
+     * @throws IllegalArgumentException When an empty / blank url is provided
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void directConstructorEmptyUrlTest() {
+
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver(DRIVER);
+        connProps.setUrl("");
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
+
+        try {
+            ConnectionFactory.getConnection(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -177,10 +212,13 @@ public class ConnectionFactoryDirectTest {
     public void directConstructorIllegalDriverTest()
             throws FactoryException {
 
-        ConnectionSpec connSpec = new ConnectionSpec(URL, USER, PASSWORD);
-        ConnectionPoolSpec poolSpec = new ConnectionPoolSpec();
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver("IllegalDriver");
+        connProps.setUrl(URL);
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
 
-        ConnectionFactory.getConnection("IllegalDriver", connSpec, poolSpec);
+        ConnectionFactory.getConnection(connProps);
     }
 
     /**
@@ -189,11 +227,14 @@ public class ConnectionFactoryDirectTest {
     @Test
     public void directConstructorConnectionTest() {
 
-        ConnectionSpec connSpec = new ConnectionSpec(URL, USER, PASSWORD);
-        ConnectionPoolSpec poolSpec = new ConnectionPoolSpec();
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver(DRIVER);
+        connProps.setUrl(URL);
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
 
         try {
-            Connection con = ConnectionFactory.getConnection(DRIVER, connSpec, poolSpec);
+            Connection con = ConnectionFactory.getConnection(connProps);
 
             String error = "The DB connection is null";
             assertThat(error, con, notNullValue());
@@ -216,14 +257,18 @@ public class ConnectionFactoryDirectTest {
     @Test
     public void directConstructorMultipleConnectionTest() {
 
-        ConnectionSpec connSpec = new ConnectionSpec(URL, USER, PASSWORD);
-        ConnectionPoolSpec poolSpec = new ConnectionPoolSpec();
-        poolSpec.setMaxTotal(POOL_MAX_CONNECTIONS);
-        poolSpec.setMaxWaitMillis(0); // fail with an exception if no connections are available in the pool
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver(DRIVER);
+        connProps.setUrl(URL);
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
+        
+        connProps.setMaxTotal(POOL_MAX_CONNECTIONS);
+        connProps.setMaxWaitMillis(0); // fail with an exception if no connections are available in the pool
 
         try {
-            Connection con1 = ConnectionFactory.getConnection(DRIVER, connSpec, poolSpec);
-            Connection con2 = ConnectionFactory.getConnection(DRIVER, connSpec, poolSpec);
+            Connection con1 = ConnectionFactory.getConnection(connProps);
+            Connection con2 = ConnectionFactory.getConnection(connProps);
 
             String error = "The DB connection 1 is null";
             assertThat(error, con1, notNullValue());
@@ -262,17 +307,21 @@ public class ConnectionFactoryDirectTest {
     public void directConstructorMultipleConnectionExhaustedPoolTest()
             throws FactoryException, SQLException {
 
-        ConnectionSpec connSpec = new ConnectionSpec(URL, USER, PASSWORD);
-        ConnectionPoolSpec poolSpec = new ConnectionPoolSpec();
-        poolSpec.setMaxTotal(POOL_MAX_CONNECTIONS);
-        poolSpec.setMaxWaitMillis(0); // fail with an exception if no connections are available in the pool
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
+        connProps.setDriver(DRIVER);
+        connProps.setUrl(URL);
+        connProps.setUsername(USER);
+        connProps.setPassword(PASSWORD);
+        
+        connProps.setMaxTotal(POOL_MAX_CONNECTIONS);
+        connProps.setMaxWaitMillis(0); // fail with an exception if no connections are available in the pool
 
         Connection con1 = null;
         Connection con2 = null;
         Connection con3 = null;
         try {
-            con1 = ConnectionFactory.getConnection(DRIVER, connSpec, poolSpec);
-            con2 = ConnectionFactory.getConnection(DRIVER, connSpec, poolSpec);
+            con1 = ConnectionFactory.getConnection(connProps);
+            con2 = ConnectionFactory.getConnection(connProps);
 
             String error = "The DB connection 1 is null";
             assertThat(error, con1, notNullValue());
@@ -285,7 +334,7 @@ public class ConnectionFactoryDirectTest {
 
             // the pool supports only 2 connections (see JNDI_MAX_CONNECTIONS)
             // borrowing a third connection will result in a FactoryException because the pool is exhausted
-            con3 = ConnectionFactory.getConnection(DRIVER, connSpec, poolSpec);
+            con3 = ConnectionFactory.getConnection(connProps);
         } finally {
 
             if (con1 != null) {

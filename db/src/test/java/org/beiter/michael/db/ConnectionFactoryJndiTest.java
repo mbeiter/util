@@ -129,8 +129,10 @@ public class ConnectionFactoryJndiTest {
     @Test(expected = NullPointerException.class)
     public void jndiConstructorNullNameTest() {
 
+        String jndiName = null;
+
         try {
-            ConnectionFactory.getConnection(null);
+            ConnectionFactory.getConnection(jndiName);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
