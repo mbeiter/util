@@ -200,7 +200,7 @@ public class ConnectionProperties {
      */
     public final void setDriver(final String driver) {
 
-        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+        // no need for validation, as we cannot possible validate all SQL driver names and null is allowed
 
         // no need for defensive copies of boolean
 
@@ -225,7 +225,7 @@ public class ConnectionProperties {
      */
     public final void setUrl(final String url) {
 
-        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+        // no need for validation, as we cannot possible validate all URL patterns and null is allowed
 
         // no need for defensive copies of boolean
 
@@ -250,7 +250,7 @@ public class ConnectionProperties {
      */
     public final void setUsername(final String username) {
 
-        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+        // no need for validation, as we cannot possible validate all username patterns and null is allowed
 
         // no need for defensive copies of boolean
 
@@ -275,7 +275,7 @@ public class ConnectionProperties {
      */
     public final void setPassword(final String password) {
 
-        // no need for validation, as we cannot possible validate all SQL dialects and null is allowed for this string
+        // no need for validation, as we cannot possible validate all password patterns and null is allowed
 
         // no need for defensive copies of boolean
 
