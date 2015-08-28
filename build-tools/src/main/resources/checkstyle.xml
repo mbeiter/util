@@ -203,7 +203,10 @@
         <!-- See http://checkstyle.sf.net/config_misc.html -->
         <module name="ArrayTypeStyle"/>
         <module name="FinalParameters"/>
+        <!--
+        Deactivating this module, as we are tracking "TODOs" with the Maven Taglist plugin
         <module name="TodoComment"/>
+        -->
         <module name="UpperEll"/>
 
         <!-- required for SuppressionCommentFilter -->
