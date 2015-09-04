@@ -83,7 +83,7 @@ public class ConnectionPropertiesTest {
         ConnectionProperties connProps = new ConnectionProperties();
         connProps.setAdditionalProperties(originalMap);
 
-        String error = "The properties builder does not create an inbound defensive copy";
+        String error = "The properties POJO does not create an inbound defensive copy";
         try {
             Map<String, String> mapInObject = (Map<String, String>) field_additionalProperties.get(connProps);
             assertThat(error, mapInObject, is(not(sameInstance(originalMap))));
@@ -102,7 +102,7 @@ public class ConnectionPropertiesTest {
 
         ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
 
-        String error = "The properties builder does not create an outbound defensive copy";
+        String error = "The properties POJO does not create an outbound defensive copy";
         try {
             Map<String, String> mapInObject = (Map<String, String>) field_additionalProperties.get(connProps);
             assertThat(error, mapInObject, is(not(sameInstance(connProps.getAdditionalProperties()))));
