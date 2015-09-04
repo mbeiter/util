@@ -235,7 +235,7 @@
         <mavenJxrPluginVersion>2.4</mavenJxrPluginVersion>
         <mavenCheckstylePluginVersion>2.13</mavenCheckstylePluginVersion>
         <findbugsMavenPluginVersion>3.0.0</findbugsMavenPluginVersion>
-        <mavenPmdPluginVersion>3.2</mavenPmdPluginVersion>
+        <mavenPmdPluginVersion>3.5</mavenPmdPluginVersion>
         <taglistMavenPluginVersion>2.4</taglistMavenPluginVersion>
         <coberturaMavenPluginVersion>2.6</coberturaMavenPluginVersion>
         <mavenJavadocPluginVersion>2.10.1</mavenJavadocPluginVersion>
