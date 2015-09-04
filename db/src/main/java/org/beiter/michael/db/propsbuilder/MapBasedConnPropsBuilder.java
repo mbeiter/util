@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.beiter.michael.db.ConnectionProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -332,6 +333,8 @@ public final class MapBasedConnPropsBuilder {
     // CHECKSTYLE:ON
     public static ConnectionProperties build(final Map<String, String> properties) {
 
+        Validate.notNull(properties);
+
         final ConnectionProperties poolSpec = new ConnectionProperties();
         String tmp = properties.get(KEY_DRIVER);
         if (StringUtils.isNotEmpty(tmp)) { // driver cannot be blank, defaulting to null to catch it
@@ -597,6 +600,8 @@ public final class MapBasedConnPropsBuilder {
             poolSpec.setMaxConnLifetimeMillis(DEFAULT_MAX_CONN_LIFETIME_MILLIS);
             logDefault(KEY_MAX_CONN_LIFETIME_MILLIS, String.valueOf(DEFAULT_MAX_CONN_LIFETIME_MILLIS));
         }
+
+        // set the default properties
 
         return poolSpec;
     }
