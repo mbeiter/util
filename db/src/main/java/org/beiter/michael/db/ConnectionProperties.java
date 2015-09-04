@@ -35,6 +35,8 @@ package org.beiter.michael.db;
 import org.apache.commons.lang3.Validate;
 
 import java.sql.Connection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class specifies connection pool properties.
@@ -166,11 +168,16 @@ public class ConnectionProperties {
     private long maxConnLifetimeMillis;
 
     /**
+     * @see ConnectionProperties#setAdditionalProperties(Map<String, String>)
+     */
+    private Map<String, String> additionalProperties;
+
+    /**
      * Constructs an empty set of connection properties, with most values being set to <code>null</code>, 0, or empty
      * (depending on the type of the property). Usually this constructor is used if this configuration POJO is populated
      * in an automated fashion (e.g. injection). If you need to build them manually (possibly with defaults), use or
      * create a properties builder.
-     * <p/>
+     * <p>
      * You can change the defaults with the setters. If you need more control over the pool than what is provided by
      * the available setters, consider using a JNDI controlled connection pool instead.
      *
@@ -662,7 +669,7 @@ public class ConnectionProperties {
 
     /**
      * The default read-only state of connections created by the pool.
-     * <p/>
+     * <p>
      * Note that some drivers do not support read only mode.
      *
      * @param defaultReadOnly The default read-only state of connections created by the pool
@@ -689,7 +696,7 @@ public class ConnectionProperties {
 
     /**
      * The default TransactionIsolation state of connections created by this pool.
-     * <p/>
+     * <p>
      * The following values are allowed:
      * <ul>
      * <li>Connection.TRANSACTION_NONE</li>
@@ -802,5 +809,51 @@ public class ConnectionProperties {
         // no need for defensive copies of long
 
         this.maxConnLifetimeMillis = maxConnLifetimeMillis;
+    }
+
+    /**
+     * @return Any additional properties stored in this object that have not explicitly been parsed
+     * @see ConnectionProperties#setAdditionalProperties(Map<String, String>)
+     */
+    public final Map<String, String> getAdditionalProperties() {
+
+        // create a defensive copy of the map and all its properties
+        if (this.additionalProperties == null) {
+            return null;
+        } else {
+            final Map<String, String> tempMap = new ConcurrentHashMap<>();
+            tempMap.putAll(additionalProperties);
+
+            return tempMap;
+        }
+    }
+
+    /**
+     * Any additional properties which have not been parsed, and for which no getter/setter exists, but are to be
+     * stored in this object nevertheless.
+     * <p>
+     * This property is commonly used to preserve original properties from upstream components that are to be passed
+     * on to downstream components unchanged. This properties set may or may not include properties that have been
+     * extracted from the map, and been made available through this POJO.
+     * <p>
+     * Note that these additional properties may be <code>null</code> or empty, even in a fully populated POJO where
+     * other properties commonly have values assigned to.
+     *
+     * @param additionalProperties The additional properties to store
+     */
+    // CHECKSTYLE:OFF
+    // this is flagged in checkstyle with a missing whitespace before '}', which is a bug in checkstyle
+    // suppress warnings about the null assignment. This is to allow the caller to dereference the object.
+    @SuppressWarnings({"PMD.NullAssignment"})
+    // CHECKSTYLE:ON
+    public final void setAdditionalProperties(final Map<String, String> additionalProperties) {
+
+        // create a defensive copy of the map and all its properties
+        if (additionalProperties == null) {
+            this.additionalProperties = null;
+        } else {
+            this.additionalProperties = new ConcurrentHashMap<>();
+            this.additionalProperties.putAll(additionalProperties);
+        }
     }
 }

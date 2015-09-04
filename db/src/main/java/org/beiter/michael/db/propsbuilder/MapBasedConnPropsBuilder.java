@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class builds a set of {@link ConnectionProperties} using the settings obtained from a Map.
- * <p/>
+ * <p>
  * Use the keys from the various KEY_* fields to properly populate the Map.
  */
 // CHECKSTYLE:OFF
@@ -335,147 +335,147 @@ public final class MapBasedConnPropsBuilder {
 
         Validate.notNull(properties);
 
-        final ConnectionProperties poolSpec = new ConnectionProperties();
+        final ConnectionProperties connProps = new ConnectionProperties();
         String tmp = properties.get(KEY_DRIVER);
         if (StringUtils.isNotEmpty(tmp)) { // driver cannot be blank, defaulting to null to catch it
-            poolSpec.setDriver(tmp);
+            connProps.setDriver(tmp);
             logValue(KEY_DRIVER, tmp);
         } else {
-            poolSpec.setDriver(DEFAULT_DRIVER);
+            connProps.setDriver(DEFAULT_DRIVER);
             logDefault(KEY_DRIVER, DEFAULT_DRIVER);
         }
 
         tmp = properties.get(KEY_URL);
         if (StringUtils.isNotEmpty(tmp)) { // url cannot be blank, defaulting to null to catch it
-            poolSpec.setUrl(tmp);
+            connProps.setUrl(tmp);
             logValue(KEY_URL, tmp);
         } else {
-            poolSpec.setUrl(DEFAULT_URL);
+            connProps.setUrl(DEFAULT_URL);
             logDefault(KEY_URL, DEFAULT_URL);
         }
 
         tmp = properties.get(KEY_USERNAME);
         if (tmp == null) { // username may be a blank string, but not null
-            poolSpec.setUsername(DEFAULT_USERNAME);
+            connProps.setUsername(DEFAULT_USERNAME);
             logDefault(KEY_USERNAME, DEFAULT_USERNAME);
         } else {
-            poolSpec.setUsername(tmp);
+            connProps.setUsername(tmp);
             logValue(KEY_USERNAME, tmp);
         }
 
         tmp = properties.get(KEY_PASSWORD);
         if (tmp == null) { // password may be a blank string, but not null
-            poolSpec.setPassword(DEFAULT_PASSWORD);
+            connProps.setPassword(DEFAULT_PASSWORD);
             logDefault(KEY_PASSWORD, DEFAULT_PASSWORD);
         } else {
-            poolSpec.setPassword(tmp);
+            connProps.setPassword(tmp);
             logValue(KEY_PASSWORD, tmp);
         }
 
         tmp = properties.get(KEY_MAX_TOTAL);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setMaxTotal(Integer.decode(tmp));
+                connProps.setMaxTotal(Integer.decode(tmp));
                 logValue(KEY_MAX_TOTAL, tmp);
             } else {
-                poolSpec.setMaxTotal(DEFAULT_MAX_TOTAL);
+                connProps.setMaxTotal(DEFAULT_MAX_TOTAL);
                 logDefault(KEY_MAX_TOTAL, tmp, "not numeric", String.valueOf(DEFAULT_MAX_TOTAL));
             }
         } else {
-            poolSpec.setMaxTotal(DEFAULT_MAX_TOTAL);
+            connProps.setMaxTotal(DEFAULT_MAX_TOTAL);
             logDefault(KEY_MAX_TOTAL, String.valueOf(DEFAULT_MAX_TOTAL));
         }
 
         tmp = properties.get(KEY_MAX_IDLE);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setMaxIdle(Integer.decode(tmp));
+                connProps.setMaxIdle(Integer.decode(tmp));
                 logValue(KEY_MAX_IDLE, tmp);
             } else {
-                poolSpec.setMaxIdle(DEFAULT_MAX_IDLE);
+                connProps.setMaxIdle(DEFAULT_MAX_IDLE);
                 logDefault(KEY_MAX_IDLE, tmp, "not numeric", String.valueOf(DEFAULT_MAX_IDLE));
             }
         } else {
-            poolSpec.setMaxIdle(DEFAULT_MAX_IDLE);
+            connProps.setMaxIdle(DEFAULT_MAX_IDLE);
             logDefault(KEY_MAX_IDLE, String.valueOf(DEFAULT_MAX_IDLE));
         }
 
         tmp = properties.get(KEY_MIN_IDLE);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setMinIdle(Integer.decode(tmp));
+                connProps.setMinIdle(Integer.decode(tmp));
                 logValue(KEY_MIN_IDLE, tmp);
             } else {
-                poolSpec.setMinIdle(DEFAULT_MIN_IDLE);
+                connProps.setMinIdle(DEFAULT_MIN_IDLE);
                 logDefault(KEY_MIN_IDLE, tmp, "not numeric", String.valueOf(DEFAULT_MIN_IDLE));
             }
         } else {
-            poolSpec.setMinIdle(DEFAULT_MIN_IDLE);
+            connProps.setMinIdle(DEFAULT_MIN_IDLE);
             logDefault(KEY_MIN_IDLE, String.valueOf(DEFAULT_MIN_IDLE));
         }
 
         tmp = properties.get(KEY_MAX_WAIT_MILLIS);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setMaxWaitMillis(Long.decode(tmp));
+                connProps.setMaxWaitMillis(Long.decode(tmp));
                 logValue(KEY_MAX_WAIT_MILLIS, tmp);
             } else {
-                poolSpec.setMaxWaitMillis(DEFAULT_MAX_WAIT_MILLIS);
+                connProps.setMaxWaitMillis(DEFAULT_MAX_WAIT_MILLIS);
                 logDefault(KEY_MAX_WAIT_MILLIS, tmp, "not numeric", String.valueOf(DEFAULT_MAX_WAIT_MILLIS));
             }
         } else {
-            poolSpec.setMaxWaitMillis(DEFAULT_MAX_WAIT_MILLIS);
+            connProps.setMaxWaitMillis(DEFAULT_MAX_WAIT_MILLIS);
             logDefault(KEY_MAX_WAIT_MILLIS, String.valueOf(DEFAULT_MAX_WAIT_MILLIS));
         }
 
         tmp = properties.get(KEY_TEST_ON_CREATE);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setTestOnCreate(Boolean.parseBoolean(tmp));
+            connProps.setTestOnCreate(Boolean.parseBoolean(tmp));
             logValue(KEY_TEST_ON_CREATE, tmp);
         } else {
-            poolSpec.setTestOnCreate(DEFAULT_TEST_ON_CREATE);
+            connProps.setTestOnCreate(DEFAULT_TEST_ON_CREATE);
             logDefault(KEY_TEST_ON_CREATE, String.valueOf(DEFAULT_TEST_ON_CREATE));
         }
 
         tmp = properties.get(KEY_TEST_ON_BORROW);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setTestOnBorrow(Boolean.parseBoolean(tmp));
+            connProps.setTestOnBorrow(Boolean.parseBoolean(tmp));
             logValue(KEY_TEST_ON_BORROW, tmp);
         } else {
-            poolSpec.setTestOnBorrow(DEFAULT_TEST_ON_BORROW);
+            connProps.setTestOnBorrow(DEFAULT_TEST_ON_BORROW);
             logDefault(KEY_TEST_ON_BORROW, String.valueOf(DEFAULT_TEST_ON_BORROW));
         }
 
         tmp = properties.get(KEY_TEST_ON_RETURN);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setTestOnReturn(Boolean.parseBoolean(tmp));
+            connProps.setTestOnReturn(Boolean.parseBoolean(tmp));
             logValue(KEY_TEST_ON_RETURN, tmp);
         } else {
-            poolSpec.setTestOnReturn(DEFAULT_TEST_ON_RETURN);
+            connProps.setTestOnReturn(DEFAULT_TEST_ON_RETURN);
             logDefault(KEY_TEST_ON_RETURN, String.valueOf(DEFAULT_TEST_ON_RETURN));
         }
 
         tmp = properties.get(KEY_TEST_WHILE_IDLE);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setTestWhileIdle(Boolean.parseBoolean(tmp));
+            connProps.setTestWhileIdle(Boolean.parseBoolean(tmp));
             logValue(KEY_TEST_WHILE_IDLE, tmp);
         } else {
-            poolSpec.setTestWhileIdle(DEFAULT_TEST_WHILE_IDLE);
+            connProps.setTestWhileIdle(DEFAULT_TEST_WHILE_IDLE);
             logDefault(KEY_TEST_WHILE_IDLE, String.valueOf(DEFAULT_TEST_WHILE_IDLE));
         }
 
         tmp = properties.get(KEY_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setTimeBetweenEvictionRunsMillis(Long.decode(tmp));
+                connProps.setTimeBetweenEvictionRunsMillis(Long.decode(tmp));
                 logValue(KEY_TIME_BETWEEN_EVICTION_RUNS_MILLIS, tmp);
             } else {
-                poolSpec.setTimeBetweenEvictionRunsMillis(DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
+                connProps.setTimeBetweenEvictionRunsMillis(DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
                 logDefault(KEY_TIME_BETWEEN_EVICTION_RUNS_MILLIS, tmp, "not numeric",
                         String.valueOf(DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
             }
         } else {
-            poolSpec.setTimeBetweenEvictionRunsMillis(DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
+            connProps.setTimeBetweenEvictionRunsMillis(DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS);
             logDefault(KEY_TIME_BETWEEN_EVICTION_RUNS_MILLIS,
                     String.valueOf(DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
         }
@@ -483,127 +483,140 @@ public final class MapBasedConnPropsBuilder {
         tmp = properties.get(KEY_NUM_TESTS_PER_EVICITON_RUN);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setNumTestsPerEvictionRun(Integer.decode(tmp));
+                connProps.setNumTestsPerEvictionRun(Integer.decode(tmp));
                 logValue(KEY_NUM_TESTS_PER_EVICITON_RUN, tmp);
             } else {
-                poolSpec.setNumTestsPerEvictionRun(DEFAULT_NUM_TESTS_PER_EVICITON_RUN);
+                connProps.setNumTestsPerEvictionRun(DEFAULT_NUM_TESTS_PER_EVICITON_RUN);
                 logDefault(KEY_NUM_TESTS_PER_EVICITON_RUN, tmp, "not numeric",
                         String.valueOf(DEFAULT_NUM_TESTS_PER_EVICITON_RUN));
             }
         } else {
-            poolSpec.setNumTestsPerEvictionRun(DEFAULT_NUM_TESTS_PER_EVICITON_RUN);
+            connProps.setNumTestsPerEvictionRun(DEFAULT_NUM_TESTS_PER_EVICITON_RUN);
             logDefault(KEY_NUM_TESTS_PER_EVICITON_RUN, String.valueOf(DEFAULT_NUM_TESTS_PER_EVICITON_RUN));
         }
 
         tmp = properties.get(KEY_MIN_EVICTABLE_IDLE_TIME_MILLIS);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setMinEvictableIdleTimeMillis(Long.decode(tmp));
+                connProps.setMinEvictableIdleTimeMillis(Long.decode(tmp));
                 logValue(KEY_MIN_EVICTABLE_IDLE_TIME_MILLIS, tmp);
             } else {
-                poolSpec.setMinEvictableIdleTimeMillis(DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
+                connProps.setMinEvictableIdleTimeMillis(DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
                 logDefault(KEY_MIN_EVICTABLE_IDLE_TIME_MILLIS, tmp, "not numeric",
                         String.valueOf(DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
             }
         } else {
-            poolSpec.setMinEvictableIdleTimeMillis(DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
+            connProps.setMinEvictableIdleTimeMillis(DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
             logDefault(KEY_MIN_EVICTABLE_IDLE_TIME_MILLIS, String.valueOf(DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
         }
 
         tmp = properties.get(KEY_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setSoftMinEvictableIdleTimeMillis(Long.decode(tmp));
+                connProps.setSoftMinEvictableIdleTimeMillis(Long.decode(tmp));
                 logValue(KEY_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS, tmp);
             } else {
-                poolSpec.setSoftMinEvictableIdleTimeMillis(DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
+                connProps.setSoftMinEvictableIdleTimeMillis(DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
                 logDefault(KEY_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS, tmp, "not numeric",
                         String.valueOf(DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
             }
         } else {
-            poolSpec.setSoftMinEvictableIdleTimeMillis(DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
+            connProps.setSoftMinEvictableIdleTimeMillis(DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS);
             logDefault(KEY_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS,
                     String.valueOf(DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
         }
 
         tmp = properties.get(KEY_LIFO);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setLifo(Boolean.parseBoolean(tmp));
+            connProps.setLifo(Boolean.parseBoolean(tmp));
             logValue(KEY_LIFO, tmp);
         } else {
-            poolSpec.setLifo(DEFAULT_LIFO);
+            connProps.setLifo(DEFAULT_LIFO);
             logDefault(KEY_LIFO, String.valueOf(DEFAULT_LIFO));
         }
 
         tmp = properties.get(KEY_AUTO_COMMIT);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setDefaultAutoCommit(Boolean.parseBoolean(tmp));
+            connProps.setDefaultAutoCommit(Boolean.parseBoolean(tmp));
             logValue(KEY_AUTO_COMMIT, tmp);
         } else {
-            poolSpec.setDefaultAutoCommit(DEFAULT_AUTO_COMMIT);
+            connProps.setDefaultAutoCommit(DEFAULT_AUTO_COMMIT);
             logDefault(KEY_AUTO_COMMIT, String.valueOf(DEFAULT_AUTO_COMMIT));
         }
 
         tmp = properties.get(KEY_READ_ONLY);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setDefaultReadOnly(Boolean.parseBoolean(tmp));
+            connProps.setDefaultReadOnly(Boolean.parseBoolean(tmp));
             logValue(KEY_READ_ONLY, tmp);
         } else {
-            poolSpec.setDefaultReadOnly(DEFAULT_READ_ONLY);
+            connProps.setDefaultReadOnly(DEFAULT_READ_ONLY);
             logDefault(KEY_READ_ONLY, String.valueOf(DEFAULT_READ_ONLY));
         }
 
         tmp = properties.get(KEY_TRANSACTION_ISOLATION);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setDefaultTransactionIsolation(Integer.decode(tmp));
+                connProps.setDefaultTransactionIsolation(Integer.decode(tmp));
                 logValue(KEY_TRANSACTION_ISOLATION, tmp);
             } else {
-                poolSpec.setDefaultTransactionIsolation(DEFAULT_TRANSACTION_ISOLATION);
+                connProps.setDefaultTransactionIsolation(DEFAULT_TRANSACTION_ISOLATION);
                 logDefault(KEY_TRANSACTION_ISOLATION, tmp, "not numeric",
                         String.valueOf(DEFAULT_TRANSACTION_ISOLATION));
             }
         } else {
-            poolSpec.setDefaultTransactionIsolation(DEFAULT_TRANSACTION_ISOLATION);
+            connProps.setDefaultTransactionIsolation(DEFAULT_TRANSACTION_ISOLATION);
             logDefault(KEY_TRANSACTION_ISOLATION, String.valueOf(DEFAULT_TRANSACTION_ISOLATION));
         }
 
         tmp = properties.get(KEY_CACHE_STATE);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setCacheState(Boolean.parseBoolean(tmp));
+            connProps.setCacheState(Boolean.parseBoolean(tmp));
             logValue(KEY_CACHE_STATE, tmp);
         } else {
-            poolSpec.setCacheState(DEFAULT_CACHE_STATE);
+            connProps.setCacheState(DEFAULT_CACHE_STATE);
             logDefault(KEY_CACHE_STATE, String.valueOf(DEFAULT_CACHE_STATE));
         }
 
         tmp = properties.get(KEY_VALIDATION_QUERY);
         if (StringUtils.isNotEmpty(tmp)) {
-            poolSpec.setValidationQuery(tmp);
+            connProps.setValidationQuery(tmp);
             logValue(KEY_VALIDATION_QUERY, tmp);
         } else {
-            poolSpec.setValidationQuery(DEFAULT_VALIDATION_QUERY);
+            connProps.setValidationQuery(DEFAULT_VALIDATION_QUERY);
             logDefault(KEY_VALIDATION_QUERY, DEFAULT_VALIDATION_QUERY);
         }
 
         tmp = properties.get(KEY_MAX_CONN_LIFETIME_MILLIS);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
-                poolSpec.setMaxConnLifetimeMillis(Long.decode(tmp));
+                connProps.setMaxConnLifetimeMillis(Long.decode(tmp));
                 logValue(KEY_MAX_CONN_LIFETIME_MILLIS, tmp);
             } else {
-                poolSpec.setMaxConnLifetimeMillis(DEFAULT_MAX_CONN_LIFETIME_MILLIS);
+                connProps.setMaxConnLifetimeMillis(DEFAULT_MAX_CONN_LIFETIME_MILLIS);
                 logDefault(KEY_MAX_CONN_LIFETIME_MILLIS, tmp, "not numeric",
                         String.valueOf(DEFAULT_MAX_CONN_LIFETIME_MILLIS));
             }
         } else {
-            poolSpec.setMaxConnLifetimeMillis(DEFAULT_MAX_CONN_LIFETIME_MILLIS);
+            connProps.setMaxConnLifetimeMillis(DEFAULT_MAX_CONN_LIFETIME_MILLIS);
             logDefault(KEY_MAX_CONN_LIFETIME_MILLIS, String.valueOf(DEFAULT_MAX_CONN_LIFETIME_MILLIS));
         }
 
-        // set the default properties
+        // set the additional properties, preserving the originally provided properties
+        // create a defensive copy of the map and all its properties
+        // the code looks a little complicated that "putAll()", but it catches situations where a Map is provided that
+        // supports null values (e.g. a HashMap) vs Map implementations that do not (e.g. ConcurrentHashMap).
+        final Map<String, String> tempMap = new ConcurrentHashMap<>();
+        for (final Map.Entry<String, String> entry : properties.entrySet()) {
+            final String key = entry.getKey();
+            final String value = entry.getValue();
 
-        return poolSpec;
+            if (value != null) {
+                tempMap.put(key, value);
+            }
+        }
+        connProps.setAdditionalProperties(tempMap);
+
+        return connProps;
     }
 
     /**

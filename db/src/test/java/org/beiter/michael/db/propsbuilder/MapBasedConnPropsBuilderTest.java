@@ -963,4 +963,44 @@ public class MapBasedConnPropsBuilderTest {
         error = "maxConnLifetimeMillis does not match expected value";
         assertThat(error, connProps.getMaxConnLifetimeMillis(), is(equalTo(42l)));
     }
+
+    /**
+     * additionalProperties test: make sure that the additional properties are being set
+     */
+    @Test
+    public void additionalPropertiesTest() {
+
+        String key = "some property";
+        String value = "some value";
+
+        Map<String, String> map = new HashMap<>();
+
+        map.put(key, value);
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.build(map);
+
+        String error = "Additional properties have not been set";
+        assertThat(error, connProps.getAdditionalProperties(), is(notNullValue()));
+
+        error = "Additional properties have not been set correctly";
+        assertThat(error, connProps.getAdditionalProperties().get(key), is(equalTo(value)));
+    }
+
+    /**
+     * additionalProperties test: make sure that the additional properties are being set to a new object (i.e. a
+     * defensive copy is being made)
+     */
+    @Test
+    public void additionalPropertiesNoSingletonTest() {
+
+        String key = "some property";
+        String value = "some value";
+
+        Map<String, String> map = new HashMap<>();
+
+        map.put(key, value);
+        ConnectionProperties connProps = MapBasedConnPropsBuilder.build(map);
+
+        String error = "The properties builder returns a singleton";
+        assertThat(error, map, is(not(sameInstance(connProps.getAdditionalProperties()))));
+    }
 }
