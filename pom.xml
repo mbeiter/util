@@ -5,7 +5,7 @@
     <groupId>org.beiter.michael.util</groupId>
     <artifactId>util-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
 
     <name>Util Parent</name>
     <description>
