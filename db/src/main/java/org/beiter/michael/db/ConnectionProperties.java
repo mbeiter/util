@@ -190,6 +190,42 @@ public class ConnectionProperties {
     }
 
     /**
+     * Creates a set of connection properties from an exist set of connection properties, making a defensive copy.
+     *
+     * @see ConnectionProperties()
+     * @param properties The set of connection properties to copy
+     */
+    public ConnectionProperties(final ConnectionProperties properties) {
+
+        this();
+
+        setDriver(properties.getDriver());
+        setUrl(properties.getUrl());
+        setUsername(properties.getUsername());
+        setPassword(properties.getPassword());
+        setMaxTotal(properties.getMaxTotal());
+        setMaxIdle(properties.getMaxIdle());
+        setMinIdle(properties.getMinIdle());
+        setMaxWaitMillis(properties.getMaxWaitMillis());
+        setTestOnCreate(properties.isTestOnCreate());
+        setTestOnBorrow(properties.isTestOnBorrow());
+        setTestOnReturn(properties.isTestOnReturn());
+        setTestWhileIdle(properties.isTestWhileIdle());
+        setTimeBetweenEvictionRunsMillis(properties.getTimeBetweenEvictionRunsMillis());
+        setNumTestsPerEvictionRun(properties.getNumTestsPerEvictionRun());
+        setMinEvictableIdleTimeMillis(properties.getMinEvictableIdleTimeMillis());
+        setSoftMinEvictableIdleTimeMillis(properties.getSoftMinEvictableIdleTimeMillis());
+        setLifo(properties.isLifo());
+        setDefaultAutoCommit(properties.isDefaultAutoCommit());
+        setDefaultReadOnly(properties.isDefaultReadOnly());
+        setDefaultTransactionIsolation(properties.getDefaultTransactionIsolation());
+        setCacheState(properties.isCacheState());
+        setValidationQuery(properties.getValidationQuery());
+        setMaxConnLifetimeMillis(properties.getMaxConnLifetimeMillis());
+        setAdditionalProperties(properties.getAdditionalProperties());
+    }
+
+    /**
      * @return The JDBC database driver class
      * @see ConnectionProperties#setDriver(String)
      */

@@ -112,4 +112,17 @@ public class ConnectionPropertiesTest {
             throw ae;
         }
     }
+
+    /**
+     * Test that the copy constructor creates a new object instance
+     */
+    @Test
+    public void copyConstructorTest() {
+
+        ConnectionProperties connProps1 = MapBasedConnPropsBuilder.buildDefault();
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps1);
+
+        String error = "The copy constructor does not create a new object instance";
+        assertThat(error, connProps1, is(not(sameInstance(connProps2))));
+    }
 }

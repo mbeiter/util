@@ -76,6 +76,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "driver does not match expected value";
         assertThat(error, connProps.getDriver(), is(equalTo("42")));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getDriver(), is(equalTo("42")));
     }
 
     /**
@@ -110,6 +114,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "url does not match expected value";
         assertThat(error, connProps.getUrl(), is(equalTo("42")));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getUrl(), is(equalTo("42")));
     }
 
     /**
@@ -149,6 +157,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "username does not match expected value";
         assertThat(error, connProps.getUsername(), is(equalTo("42")));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getUsername(), is(equalTo("42")));
     }
 
     /**
@@ -188,6 +200,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "password does not match expected value";
         assertThat(error, connProps.getPassword(), is(equalTo("42")));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getPassword(), is(equalTo("42")));
     }
 
     /**
@@ -227,6 +243,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "maxTotal does not match expected value";
         assertThat(error, connProps.getMaxTotal(), is(equalTo(42)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getMaxTotal(), is(equalTo(42)));
     }
 
     /**
@@ -266,6 +286,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "maxIdle does not match expected value";
         assertThat(error, connProps.getMaxIdle(), is(equalTo(42)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getMaxIdle(), is(equalTo(42)));
     }
 
     /**
@@ -305,6 +329,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "minIdle does not match expected value";
         assertThat(error, connProps.getMinIdle(), is(equalTo(42)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getMinIdle(), is(equalTo(42)));
     }
 
     /**
@@ -355,6 +383,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "maxWaitMillis does not match expected value";
         assertThat(error, connProps.getMaxWaitMillis(), is(equalTo(42l)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getMaxWaitMillis(), is(equalTo(42l)));
     }
 
     /**
@@ -405,6 +437,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "testOnCreate does not match expected value";
         assertThat(error, connProps.isTestOnCreate(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isTestOnCreate(), is(equalTo(true)));
     }
 
     /**
@@ -444,6 +480,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "testOnBorrow does not match expected value";
         assertThat(error, connProps.isTestOnBorrow(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isTestOnBorrow(), is(equalTo(true)));
     }
 
     /**
@@ -483,6 +523,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "testOnReturn does not match expected value";
         assertThat(error, connProps.isTestOnReturn(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isTestOnReturn(), is(equalTo(true)));
     }
 
     /**
@@ -522,6 +566,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "testWhileIdle does not match expected value";
         assertThat(error, connProps.isTestWhileIdle(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isTestWhileIdle(), is(equalTo(true)));
     }
 
     /**
@@ -561,6 +609,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "timeBetweenEvictionRunsMillis does not match expected value";
         assertThat(error, connProps.getTimeBetweenEvictionRunsMillis(), is(equalTo(42l)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getTimeBetweenEvictionRunsMillis(), is(equalTo(42l)));
     }
 
     /**
@@ -600,6 +652,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "numTestsPerEvictionRun does not match expected value";
         assertThat(error, connProps.getNumTestsPerEvictionRun(), is(equalTo(42)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getNumTestsPerEvictionRun(), is(equalTo(42)));
     }
 
     /**
@@ -650,6 +706,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "minEvictableIdleTimeMillis does not match expected value";
         assertThat(error, connProps.getMinEvictableIdleTimeMillis(), is(equalTo(42l)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getMinEvictableIdleTimeMillis(), is(equalTo(42l)));
     }
 
     /**
@@ -689,6 +749,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "softMinEvictableIdleTimeMillis does not match expected value";
         assertThat(error, connProps.getSoftMinEvictableIdleTimeMillis(), is(equalTo(42l)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getSoftMinEvictableIdleTimeMillis(), is(equalTo(42l)));
     }
 
     /**
@@ -728,6 +792,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "lifo does not match expected value";
         assertThat(error, connProps.isLifo(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isLifo(), is(equalTo(true)));
     }
 
     /**
@@ -767,6 +835,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "defaultAutoCommit does not match expected value";
         assertThat(error, connProps.isDefaultAutoCommit(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isDefaultAutoCommit(), is(equalTo(true)));
     }
 
     /**
@@ -806,6 +878,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "defaultReadOnly does not match expected value";
         assertThat(error, connProps.isDefaultReadOnly(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isDefaultReadOnly(), is(equalTo(true)));
     }
 
     /**
@@ -845,6 +921,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "defaultTransactionIsolation does not match expected value";
         assertThat(error, connProps.getDefaultTransactionIsolation(), is(equalTo(Connection.TRANSACTION_SERIALIZABLE)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getDefaultTransactionIsolation(), is(equalTo(Connection.TRANSACTION_SERIALIZABLE)));
     }
 
     /**
@@ -884,6 +964,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "cacheState does not match expected value";
         assertThat(error, connProps.isCacheState(), is(equalTo(true)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.isCacheState(), is(equalTo(true)));
     }
 
     /**
@@ -923,6 +1007,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "validationQuery does not match expected default value";
         assertThat(error, connProps.getValidationQuery(), is(equalTo("42")));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getValidationQuery(), is(equalTo("42")));
     }
 
     /**
@@ -962,6 +1050,10 @@ public class MapBasedConnPropsBuilderTest {
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "maxConnLifetimeMillis does not match expected value";
         assertThat(error, connProps.getMaxConnLifetimeMillis(), is(equalTo(42l)));
+
+        ConnectionProperties connProps2 = new ConnectionProperties(connProps);
+        error = "copy constructor does not copy field";
+        assertThat(error, connProps2.getMaxConnLifetimeMillis(), is(equalTo(42l)));
     }
 
     /**
