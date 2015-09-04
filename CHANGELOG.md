@@ -14,3 +14,8 @@ that extracts properties of a Map<String, String> is provided in this implementa
 
 Library consumers can use their own mechanism to populate the properties POJO. Examples include Spring configuration,
 injection mechanisms, creating a new builder that uses Java Properties, etc.
+
+## 1.2
+
+* Parsed properties contain a copy of the original properties (fixes #6)
+* Connection properties support defensive copying via copy constructor (fixes #1)
