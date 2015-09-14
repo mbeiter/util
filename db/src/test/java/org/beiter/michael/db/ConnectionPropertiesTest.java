@@ -40,9 +40,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.sameInstance;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class ConnectionPropertiesTest {
@@ -55,7 +53,7 @@ public class ConnectionPropertiesTest {
      * This is executed before every test to ensure consistency even if one of the tests mock with field accessibility.
      */
     @Before
-    public void makeMessageLoggerPrivateFieldsAccessible() {
+    public void makeAdditionalPropertiesPrivateFieldsAccessible() {
 
         // make the "enabled" field in the default implementation accessible
         try {
@@ -66,6 +64,48 @@ public class ConnectionPropertiesTest {
             throw ae;
         }
         field_additionalProperties.setAccessible(true);
+    }
+
+    /**
+     * Test that the additional properties are never <code>null</code>
+     */
+    @Test
+    public void additionalPropertiesAreNeverNullTest() {
+
+        String key = "some property";
+        String value = "some value";
+
+        Map<String, String> originalMap = new HashMap<>();
+
+        originalMap.put(key, value);
+        ConnectionProperties connProps = new ConnectionProperties();
+
+        String error = "The additional properties are null after create";
+        try {
+            Map<String, String> mapInObject = (Map<String, String>) field_additionalProperties.get(connProps);
+            assertThat(error, mapInObject, is(not(nullValue())));
+        } catch (IllegalAccessException e) {
+            AssertionError ae = new AssertionError("Cannot access private field");
+            ae.initCause(e);
+            throw ae;
+        }
+
+        connProps = new ConnectionProperties();
+        error = "The additional properties are null after null put";
+        connProps.setAdditionalProperties(null);
+        try {
+            Map<String, String> mapInObject = (Map<String, String>) field_additionalProperties.get(connProps);
+            assertThat(error, mapInObject, is(not(nullValue())));
+        } catch (IllegalAccessException e) {
+            AssertionError ae = new AssertionError("Cannot access private field");
+            ae.initCause(e);
+            throw ae;
+        }
+
+        connProps = new ConnectionProperties();
+        error = "The additional properties are null at get";
+        Map<String, String> mapInObject = connProps.getAdditionalProperties();
+        assertThat(error, mapInObject, is(not(nullValue())));
     }
 
     /**
