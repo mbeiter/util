@@ -191,8 +191,9 @@ public class ConnectionProperties {
 
     /**
      * Creates a set of connection properties from an exist set of connection properties, making a defensive copy.
+     * <p>
+     * See {@link ConnectionProperties#ConnectionProperties()}
      *
-     * @see ConnectionProperties()
      * @param properties The set of connection properties to copy
      */
     public ConnectionProperties(final ConnectionProperties properties) {
@@ -849,7 +850,7 @@ public class ConnectionProperties {
 
     /**
      * @return Any additional properties stored in this object that have not explicitly been parsed
-     * @see ConnectionProperties#setAdditionalProperties(Map<String, String>)
+     * @see ConnectionProperties#setAdditionalProperties(Map)
      */
     public final Map<String, String> getAdditionalProperties() {
 
