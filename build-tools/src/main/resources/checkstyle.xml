@@ -49,9 +49,7 @@
 
     <!-- Checks that each Java package has a Javadoc file used for commenting. -->
     <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocPackage       -->
-    <module name="JavadocPackage">
-        <property name="allowLegacy" value="true"/>
-    </module>
+    <module name="JavadocPackage"/>
 
     <!-- Checks whether files end with a new line.                        -->
     <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
@@ -86,7 +84,9 @@
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-        <module name="JavadocMethod"/>
+        <module name="JavadocMethod">
+            <property name="allowUndeclaredRTE" value="true"/>
+        </module>
         <module name="JavadocType"/>
         <module name="JavadocVariable"/>
         <module name="JavadocStyle">
@@ -181,7 +181,8 @@
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="MagicNumber">
-            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 24, 30, 60, 128, 256, 512, 1000, 1024, 2048, 4096"/>
+            <property name="ignoreNumbers"
+                      value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 24, 30, 60, 128, 256, 512, 1000, 1024, 2048, 4096"/>
         </module>
         <module name="MissingSwitchDefault"/>
         <module name="RedundantThrows">
