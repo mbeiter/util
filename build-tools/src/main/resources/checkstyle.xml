@@ -24,7 +24,6 @@
     - Max line length is 120 instead of 80
     - Ignore the "HiddenField" check for constructors, setters, and abstract methods
     - Do not check the first sentence for proper end of sentence
-    - Suppress load errors in RedundantThrows checks
     - Turn checkstyle off/on with CHECKSTYLE:ON and CHECKSTYLE:OFF inline comments
 
   Checkstyle is very configurable. Be sure to read the documentation at
@@ -86,6 +85,7 @@
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
         <module name="JavadocMethod">
             <property name="allowUndeclaredRTE" value="true"/>
+            <property name="suppressLoadErrors" value="true"/>
         </module>
         <module name="JavadocType"/>
         <module name="JavadocVariable"/>
@@ -185,9 +185,6 @@
                       value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 24, 30, 60, 128, 256, 512, 1000, 1024, 2048, 4096"/>
         </module>
         <module name="MissingSwitchDefault"/>
-        <module name="RedundantThrows">
-            <property name="suppressLoadErrors" value="true"/>
-        </module>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
 

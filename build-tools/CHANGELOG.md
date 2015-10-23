@@ -11,3 +11,7 @@ Disable checkstyle "TODO" check, as this is tracked with the Maven Taglist plugi
 ## 1.2
 
 Allow documentation of Runtime Exceptions in JavaDocs @throws tag
+
+## 1.3
+
+Removed the RedundantThrows checker, as it was deprecated and is no longer supported in the current Checkstyle versions

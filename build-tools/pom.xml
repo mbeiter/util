@@ -5,7 +5,7 @@
     <groupId>org.beiter.michael.util</groupId>
     <artifactId>build-tools</artifactId>
     <packaging>jar</packaging>
-    <version>1.2</version>
+    <version>1.3</version>
 
     <name>build-tools</name>
     <description>
