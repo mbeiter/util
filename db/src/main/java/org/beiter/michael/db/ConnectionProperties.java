@@ -195,10 +195,13 @@ public class ConnectionProperties {
      * See {@link ConnectionProperties#ConnectionProperties()}
      *
      * @param properties The set of connection properties to copy
+     * @throws NullPointerException When {@code properties} is {@code null}
      */
     public ConnectionProperties(final ConnectionProperties properties) {
 
         this();
+
+        Validate.notNull(properties, "The validated object 'properties' is null");
 
         setDriver(properties.getDriver());
         setUrl(properties.getUrl());
@@ -392,6 +395,7 @@ public class ConnectionProperties {
      * to create none.
      *
      * @param minIdle the minimum number of idle connections
+     * @throws IllegalArgumentException When the provided value of {@code minIdle} is out of range
      */
     public final void setMinIdle(final int minIdle) {
 
@@ -418,6 +422,7 @@ public class ConnectionProperties {
      * connection to be returned before throwing an exception, or -1 to wait indefinitely.
      *
      * @param maxWaitMillis the maximum number of milliseconds that the pool will wait for a connection
+     * @throws IllegalArgumentException When the provided value of {@code maxWaitMillis} is out of range
      */
     public final void setMaxWaitMillis(final long maxWaitMillis) {
 
@@ -569,6 +574,7 @@ public class ConnectionProperties {
      *
      * @param numTestsPerEvictionRun the number of objects to examine during each run of the idle object evictor thread
      *                               (if any)
+     * @throws IllegalArgumentException When the provided value of {@code numTestsPerEvictionRun} is out of range
      */
     public final void setNumTestsPerEvictionRun(final int numTestsPerEvictionRun) {
 
@@ -880,6 +886,8 @@ public class ConnectionProperties {
      * @param additionalProperties The additional properties to store
      */
     public final void setAdditionalProperties(final Map<String, String> additionalProperties) {
+
+        // no need for validation, the method will create a new (empty) object if the provided parameter is null.
 
         // create a defensive copy of the map and all its properties
         if (additionalProperties == null) {

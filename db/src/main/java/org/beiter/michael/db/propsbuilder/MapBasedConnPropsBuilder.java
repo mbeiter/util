@@ -324,6 +324,7 @@ public final class MapBasedConnPropsBuilder {
      *
      * @param properties A <code>HashMap</code> with configuration properties, using the keys as specified in this class
      * @return A <code>ConnectionProperties</code> object with default values, plus the provided parameters
+     * @throws NullPointerException When {@code properties} is {@code null}
      */
     // CHECKSTYLE:OFF
     // this is flagged in checkstyle with a missing whitespace before '}', which is a bug in checkstyle
@@ -333,7 +334,7 @@ public final class MapBasedConnPropsBuilder {
     // CHECKSTYLE:ON
     public static ConnectionProperties build(final Map<String, String> properties) {
 
-        Validate.notNull(properties);
+        Validate.notNull(properties, "The validated object 'properties' is null");
 
         final ConnectionProperties connProps = new ConnectionProperties();
         String tmp = properties.get(KEY_DRIVER);

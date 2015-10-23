@@ -84,12 +84,14 @@ public final class ConnectionFactory {
      *
      * @param jndiName The JNDI connection name
      * @return a JDBC connection
-     * @throws FactoryException When the connection cannot be retrieved from JNDI
+     * @throws FactoryException         When the connection cannot be retrieved from JNDI
+     * @throws NullPointerException     When {@code jndiName} is null
+     * @throws IllegalArgumentException When {@code jndiName} is empty
      */
     public static Connection getConnection(final String jndiName)
             throws FactoryException {
 
-        Validate.notBlank(jndiName);
+        Validate.notBlank(jndiName, "The validated character sequence 'jndiName' is null or empty");
 
         try {
             // the initial context is created from the provided JNDI settings
@@ -117,22 +119,27 @@ public final class ConnectionFactory {
 
     /**
      * Return a Connection instance from a pool that manages JDBC driver based connections.
-     * <p/>
+     * <p>
      * The driver-based connection are managed in a connection pool. The pool is created using the provided properties
      * for both the connection and the pool spec. Once the pool has been created, it is cached (based on URL and
      * username), and can no longer be changed. Subsequent calls to this method will return a connection from the
      * cached pool, and changes in the pool spec (e.g. changes to the size of the pool) will be ignored.
      *
-     * @param poolSpec   A connection pool spec that has the driver and url configured as non-empty strings
+     * @param poolSpec A connection pool spec that has the driver and url configured as non-empty strings
      * @return a JDBC connection
-     * @throws FactoryException When the connection cannot be retrieved from the pool, or the pool cannot be created
+     * @throws FactoryException         When the connection cannot be retrieved from the pool, or the pool cannot be
+     *                                  created
+     * @throws NullPointerException     When the {@code poolSpec}, {@code poolSpec.getDriver()}, or
+     *                                  {@code poolSpec.getUrl()} are {@code null}
+     * @throws IllegalArgumentException When {@code poolSpec.getDriver()} or {@code poolSpec.getUrl()} are empty
      */
     public static Connection getConnection(final ConnectionProperties poolSpec)
             throws FactoryException {
 
-        Validate.notNull(poolSpec);
-        Validate.notBlank(poolSpec.getDriver());
-        Validate.notBlank(poolSpec.getUrl());
+        Validate.notNull(poolSpec, "The validated object 'poolSpec' is null");
+        Validate.notBlank(poolSpec.getDriver(),
+                "The validated character sequence 'poolSpec.getDriver()' is null or empty");
+        Validate.notBlank(poolSpec.getUrl(), "The validated character sequence 'poolSpec.getUrl()' is null or empty");
 
         // no need for defensive copies of Strings
 
@@ -189,7 +196,7 @@ public final class ConnectionFactory {
 
     /**
      * Resets the internal state of the factory.
-     * <p/>
+     * <p>
      * <strong>This method does not release any resources that have been borrowed from the connection pools managed
      * by this factory.</strong> To avoid resource leaks, you <strong>must</strong> close / return all connections to
      * their pools before calling this method.
