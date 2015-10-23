@@ -223,7 +223,7 @@
         <toplevelArtifactId>util-parent</toplevelArtifactId>
         <javaVersion>1.7</javaVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <buildToolsVersion>1.0</buildToolsVersion>
+        <buildToolsVersion>1.2</buildToolsVersion>
 
         <!-- plugin versions -->
         <!-- =============== -->
