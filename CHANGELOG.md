@@ -19,3 +19,10 @@ injection mechanisms, creating a new builder that uses Java Properties, etc.
 
 * Parsed properties contain a copy of the original properties (fixes #6)
 * Connection properties support defensive copying via copy constructor (fixes #1)
+
+## 1.3
+
+* Upgrade build tools used in util lib to 1.2 (fixes #2)
+* Runtime exceptions thrown by the Validate.*() methods should be documented (fixes #5)
+* Upgrade build tools used in util lib to 1.3 (fixes #8)
+* First pass on array utilities implementation (fixes #9)
