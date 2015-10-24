@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.beiter.michael.util</groupId>
         <artifactId>util-parent</artifactId>
-        <version>1.3</version>
+        <version>1.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>array</artifactId>
     <packaging>jar</packaging>
-    <version>1.3</version>
+    <version>1.4-SNAPSHOT</version>
 
     <name>Array Utils</name>
     <description>
