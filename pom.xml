@@ -16,6 +16,7 @@
     <url>http://mbeiter.github.io/util/docs/${project.version}/</url>
 
     <modules>
+        <module>array</module>
         <module>db</module>
     </modules>
 
