@@ -35,8 +35,8 @@ Then go to the [Sonatype staging repo](https://oss.sonatype.org/) and promote th
     mvn clean
     git status
     git add . -A
-    git commit -m "Release 1.0 prep"
-    git tag -a 1.0 -m "Release 1.0"
+    git commit -m "Build Tools Release 1.0 prep"
+    git tag -a BT-1.0 -m "Build Tools Release 1.0"
 
 ### Push to GitHub
 
