@@ -2,7 +2,7 @@
  * #%L
  * This file is part of an array utilities library.
  * %%
- * Copyright (C) 2014 - 2015 Michael Beiter <michael@beiter.org>
+ * Copyright (C) 2014 - 2016 Michael Beiter <michael@beiter.org>
  * %%
  * All rights reserved.
  * .

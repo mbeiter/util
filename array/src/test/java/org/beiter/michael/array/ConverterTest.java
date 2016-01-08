@@ -2,7 +2,7 @@
  * #%L
  * This file is part of an array utilities library.
  * %%
- * Copyright (C) 2014 - 2015 Michael Beiter <michael@beiter.org>
+ * Copyright (C) 2014 - 2016 Michael Beiter <michael@beiter.org>
  * %%
  * All rights reserved.
  * .
@@ -35,6 +35,7 @@ package org.beiter.michael.array;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.UnsupportedCharsetException;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -108,6 +109,17 @@ public class ConverterTest {
     }
 
     /**
+     * Convert a char array to a byte array with an unsupported charset
+     */
+    @Test(expected = UnsupportedCharsetException.class)
+    public void charToByteUnsupportedCharsetTest() {
+
+        String sourceString = "This is a test: \u00C4-\u00D6-\u00DC";
+        char[] input_asChar = sourceString.toCharArray();
+        byte[] result = Converter.toBytes(input_asChar, "invalid_charset");
+    }
+
+    /**
      * Test that the {@link Converter#toChars(byte[])}} and {@link Converter#toChars(byte[], String)}} can handle
      * {@code null} references
      */
@@ -137,7 +149,7 @@ public class ConverterTest {
      * Convert a byte array to a char array
      */
     @Test
-    public void byteToCharTest() throws UnsupportedEncodingException {
+    public void byteToCharTest() {
 
         byte[] sourceBytes_UTF8 = new byte[] {
                 0x41, // A
@@ -174,6 +186,16 @@ public class ConverterTest {
         result = Converter.toChars(sourceBytes_ISO88591, "ISO-8859-1");
         error = "The result of the conversion does not meet the expected result (ISO-8859-1 encoding)";
         assertThat(error, result, is(equalTo(expectedChar)));
+    }
+
+    /**
+     * Convert a byte array to a char array with an unsupported charset
+     */
+    @Test(expected = UnsupportedCharsetException.class)
+    public void byteToCharUnsupportedCharsetTest() {
+
+        byte[] sourceBytes = new byte[]{};
+        char[] result = Converter.toChars(sourceBytes, "invalid_charset");
     }
 
     /**

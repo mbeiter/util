@@ -2,7 +2,7 @@
  * #%L
  * This file is part of an array utilities library.
  * %%
- * Copyright (C) 2014 - 2015 Michael Beiter <michael@beiter.org>
+ * Copyright (C) 2014 - 2016 Michael Beiter <michael@beiter.org>
  * %%
  * All rights reserved.
  * .
@@ -83,8 +83,9 @@ public final class Converter {
      * @param chars    The char array to convert
      * @param encoding The string encoding to use
      * @return The byte[] representation of the provided char array
-     * @throws NullPointerException     When {@code encoding} is null
-     * @throws IllegalArgumentException When {@code encoding} is empty
+     * @throws NullPointerException                         When {@code encoding} is null
+     * @throws IllegalArgumentException                     When {@code encoding} is empty
+     * @throws java.nio.charset.UnsupportedCharsetException When {@code encoding} is invalid
      */
     public static byte[] toBytes(final char[] chars, final String encoding) {
 
@@ -144,8 +145,9 @@ public final class Converter {
      * @param bytes    The byte array to convert
      * @param encoding The string encoding to use
      * @return The char[] representation of the provided byte array
-     * @throws NullPointerException     When {@code encoding} is null
-     * @throws IllegalArgumentException When {@code encoding} is empty
+     * @throws NullPointerException                         When {@code encoding} is null
+     * @throws IllegalArgumentException                     When {@code encoding} is empty
+     * @throws java.nio.charset.UnsupportedCharsetException When {@code encoding} is invalid
      */
     public static char[] toChars(final byte[] bytes, final String encoding) {
 
