@@ -230,7 +230,7 @@
         <!-- =============== -->
         <!-- http://maven.apache.org/plugins/index.html -->
         <mavenCompilerPluginVersion>3.2</mavenCompilerPluginVersion>
-        <licenseMavenPluginVersion>2.6</licenseMavenPluginVersion>
+        <licenseMavenPluginVersion>1.7</licenseMavenPluginVersion>
         <mavenDependencyPluginVersion>2.9</mavenDependencyPluginVersion>
         <mavenSourcePluginVersion>2.4</mavenSourcePluginVersion>
         <mavenJxrPluginVersion>2.4</mavenJxrPluginVersion>
@@ -361,7 +361,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>1.7</version>
+                <version>${licenseMavenPluginVersion}</version>
                 <configuration>
                     <licenseName>3-bsd-mb</licenseName>
                     <licenseResolver>classpath://license</licenseResolver>
