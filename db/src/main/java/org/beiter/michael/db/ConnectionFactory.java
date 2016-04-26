@@ -32,31 +32,18 @@
  */
 package org.beiter.michael.db;
 
-import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp2.PoolableConnection;
-import org.apache.commons.dbcp2.PoolableConnectionFactory;
-import org.apache.commons.dbcp2.PoolingDataSource;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
- * This class creates and manages JDBC Connection instances from:
+ * This class creates and manages JDBC Connection instances either from:
  * <ul>
- * <li>A named JNDI managed connection</li>
- * <li>A connection pool that is maintained by this factory</li>
+ * <li>a named JNDI managed connection or</li>
+ * <li>a connection pool that is maintained by the {@link DataSourceFactory} factory</li>
  * </ul>
  */
 public final class ConnectionFactory {
@@ -65,13 +52,6 @@ public final class ConnectionFactory {
      * The logger object for this class
      */
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
-
-
-    /**
-     * This hash map stores the generated pools per connection
-     */
-    private static final ConcurrentHashMap<String, PoolingDataSource<PoolableConnection>> CONNECTION_POOLS =
-            new ConcurrentHashMap<>();
 
     /**
      * A private constructor to prevent instantiation of this class
@@ -93,24 +73,11 @@ public final class ConnectionFactory {
 
         Validate.notBlank(jndiName, "The validated character sequence 'jndiName' is null or empty");
 
+        // no need for defensive copies of Strings
+
         try {
-            // the initial context is created from the provided JNDI settings
-            final Context context = new InitialContext();
-
-            // retrieve a data source object, close the context as it is no longer needed, and return the connection
-            final Object namedObject = context.lookup(jndiName);
-            if (DataSource.class.isInstance(namedObject)) {
-                final DataSource dataSource = (DataSource) context.lookup(jndiName);
-                context.close();
-
-                return dataSource.getConnection();
-            } else {
-                final String error = "The JNDI name '" + jndiName + "' does not reference a SQL DataSource."
-                        + " This is a configuration issue.";
-                LOG.warn(error);
-                throw new FactoryException(error);
-            }
-        } catch (SQLException | NamingException e) {
+            return DataSourceFactory.getDataSource(jndiName).getConnection();
+        } catch (SQLException e) {
             final String error = "Error retrieving JDBC connection from JNDI: " + jndiName;
             LOG.warn(error);
             throw new FactoryException(error, e);
@@ -143,51 +110,11 @@ public final class ConnectionFactory {
 
         // no need for defensive copies of Strings
 
-        final String driver = poolSpec.getDriver();
-        final String url = poolSpec.getUrl();
-        // CHECKSTYLE:OFF
-        // this particular set of inline conditions is easy to read :-)
-        final String username = poolSpec.getUsername() == null ? "" : poolSpec.getUsername();
-        final String password = poolSpec.getPassword() == null ? "" : poolSpec.getPassword();
-        // CHECKSTYLE:OFF
-
-        // Load the database driver (if not already done)
-        loadDriver(driver);
-
-        // create the hash map required for the connection pool username + password
-        final ConcurrentMap<String, String> properties = new ConcurrentHashMap<>();
-        properties.put("user", username);
-        properties.put("password", password);
-
-        // we keep a separate pool per connection
-        // a connection is identified by the URL, the username, and the password
-        final String key = String.format("%s:%s", url, username);
-
-        // avoid if possible to create the pool multiple times, and store the data source pool for later use
-        if (!CONNECTION_POOLS.containsKey(key)) {
-            synchronized (ConnectionFactory.class) {
-                if (!CONNECTION_POOLS.containsKey(key)) {
-
-                    // this call is thread safe even without the double if check and extra synchronization. However, it
-                    // might happen that the pool is created multiple times. While additional copies would be simply
-                    // thrown away, we might run into problems in case that, for instance, the number of connections
-                    // from the same user / machine are restricted on the DB server.
-                    // While this does not happen a lot (it only happens if there is not already an entry and multiple
-                    // threads race this block and lose), it could still lead to a failure, and we must take this double
-                    // sync workaround. There is a solution for Java 8 - see below.
-                    CONNECTION_POOLS.putIfAbsent(key, getPoolingDataSource(url, properties, poolSpec));
-                }
-            }
-        }
-        // This would solve the problem of multiple pools being created and all but one being throws away, but it
-        // does not work before Java 8 because the "computeIfAbsent()" method with the lambda function is not
-        // available before Java 8:
-        // TODO: add the pooled data source with the "computeIfAbsent()" method to improve performance in Java 8
-        //CONNECTION_POOLS.computeIfAbsent(key, k -> getPoolingDataSource(url, properties, poolSpec));
-
         try {
-            return CONNECTION_POOLS.get(key).getConnection();
+            return DataSourceFactory.getDataSource(poolSpec).getConnection();
         } catch (SQLException e) {
+            // a connection is identified by the URL, the username, and the password
+            final String key = String.format("%s:%s", poolSpec.getUrl(), poolSpec.getUsername());
             final String error = "Error retrieving JDBC connection from pool: " + key;
             LOG.warn(error);
             throw new FactoryException(error, e);
@@ -195,7 +122,8 @@ public final class ConnectionFactory {
     }
 
     /**
-     * Resets the internal state of the factory.
+     * Resets the internal state of the {@link DataSourceFactory} that manages the data source pools exposed by this
+     * factory.
      * <p>
      * <strong>This method does not release any resources that have been borrowed from the connection pools managed
      * by this factory.</strong> To avoid resource leaks, you <strong>must</strong> close / return all connections to
@@ -204,86 +132,6 @@ public final class ConnectionFactory {
     public static void reset() {
 
         // Unset the cached connections
-        CONNECTION_POOLS.clear();
-    }
-
-    /**
-     * Make sure that the database driver exists
-     *
-     * @param driver The JDBC driver class to load
-     * @throws FactoryException When the driver cannot be loaded
-     */
-    private static void loadDriver(final String driver) throws FactoryException {
-
-        // assert in private method
-        assert driver != null : "The driver cannot be null";
-
-        LOG.debug("Loading the database driver '" + driver + "'");
-
-        // make sure the driver is available
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            final String error = "Error loading JDBC driver class: " + driver;
-            LOG.warn(error, e);
-            throw new FactoryException(error, e);
-        }
-    }
-
-    /**
-     * Get a pooled data source for the provided connection parameters.
-     *
-     * @param url        The JDBC database URL of the form <code>jdbc:subprotocol:subname</code>
-     * @param properties A list of key/value configuration parameters to pass as connection arguments. Normally at
-     *                   least a "user" and "password" property should be included
-     * @param poolSpec   A connection pool spec
-     * @return A pooled database connection
-     */
-    private static PoolingDataSource<PoolableConnection> getPoolingDataSource(final String url,
-                                                                              final ConcurrentMap<String, String> properties,
-                                                                              final ConnectionProperties poolSpec) {
-
-        // assert in private method
-        assert url != null : "The url cannot be null";
-        assert properties != null : "The properties cannot be null";
-        assert poolSpec != null : "The pol spec cannot be null";
-
-        LOG.debug("Creating new pooled data source for '" + url + "'");
-
-        // convert the properties hashmap to java properties
-        final Properties props = new Properties();
-        props.putAll(properties);
-
-        // create a Apache DBCP pool configuration from the pool spec
-        final GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
-        poolConfig.setMaxTotal(poolSpec.getMaxTotal());
-        poolConfig.setMaxIdle(poolSpec.getMaxIdle());
-        poolConfig.setMinIdle(poolSpec.getMinIdle());
-        poolConfig.setMaxWaitMillis(poolSpec.getMaxWaitMillis());
-        poolConfig.setTestOnCreate(poolSpec.isTestOnCreate());
-        poolConfig.setTestOnBorrow(poolSpec.isTestOnBorrow());
-        poolConfig.setTestOnReturn(poolSpec.isTestOnReturn());
-        poolConfig.setTestWhileIdle(poolSpec.isTestWhileIdle());
-        poolConfig.setTimeBetweenEvictionRunsMillis(poolSpec.getTimeBetweenEvictionRunsMillis());
-        poolConfig.setNumTestsPerEvictionRun(poolSpec.getNumTestsPerEvictionRun());
-        poolConfig.setMinEvictableIdleTimeMillis(poolSpec.getMinEvictableIdleTimeMillis());
-        poolConfig.setSoftMinEvictableIdleTimeMillis(poolSpec.getSoftMinEvictableIdleTimeMillis());
-        poolConfig.setLifo(poolSpec.isLifo());
-
-
-        // create the pool and assign the factory to the pool
-        final org.apache.commons.dbcp2.ConnectionFactory connFactory = new DriverManagerConnectionFactory(url, props);
-        final PoolableConnectionFactory poolConnFactory = new PoolableConnectionFactory(connFactory, null);
-        poolConnFactory.setDefaultAutoCommit(poolSpec.isDefaultAutoCommit());
-        poolConnFactory.setDefaultReadOnly(poolSpec.isDefaultReadOnly());
-        poolConnFactory.setDefaultTransactionIsolation(poolSpec.getDefaultTransactionIsolation());
-        poolConnFactory.setCacheState(poolSpec.isCacheState());
-        poolConnFactory.setValidationQuery(poolSpec.getValidationQuery());
-        poolConnFactory.setMaxConnLifetimeMillis(poolSpec.getMaxConnLifetimeMillis());
-        final GenericObjectPool<PoolableConnection> connPool = new GenericObjectPool<>(poolConnFactory, poolConfig);
-        poolConnFactory.setPool(connPool);
-
-        // create a new pooled data source
-        return new PoolingDataSource<>(connPool);
+        DataSourceFactory.reset();
     }
 }

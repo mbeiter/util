@@ -32,7 +32,6 @@
  */
 package org.beiter.michael.db;
 
-import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,18 +39,16 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-
-import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class ConnectionFactoryJndiTest {
+public class DataSourceFactoryJndiTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
 
@@ -115,7 +112,7 @@ public class ConnectionFactoryJndiTest {
         String jndiName = null;
 
         try {
-            ConnectionFactory.getConnection(jndiName);
+            DataSourceFactory.getDataSource(jndiName);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -132,7 +129,7 @@ public class ConnectionFactoryJndiTest {
     public void jndiConstructorEmptyNameTest() {
 
         try {
-            ConnectionFactory.getConnection("");
+            DataSourceFactory.getDataSource("");
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -149,83 +146,50 @@ public class ConnectionFactoryJndiTest {
     public void jndiConstructorIllegalNameTest()
             throws FactoryException {
 
-        ConnectionFactory.getConnection("IllegalName");
+        DataSourceFactory.getDataSource("IllegalName");
     }
 
     /**
-     * Test that the JNDI factory method returns a connection
+     * Test that the JNDI factory method returns a data source
      */
     @Test
-    public void jndiConstructorConnectionTest() {
+    public void jndiConstructorDataSourceTest() {
 
         try {
-            Connection con = ConnectionFactory.getConnection(JNDI_NAME);
+            DataSource ds = DataSourceFactory.getDataSource(JNDI_NAME);
 
-            String error = "The DB connection is null";
-            assertThat(error, con, notNullValue());
+            String error = "The data source is null";
+            assertThat(error, ds, notNullValue());
 
-            con.close();
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
-            ae.initCause(e);
-            throw ae;
-        } catch (SQLException e) {
-            AssertionError ae = new AssertionError("Error closing the connection");
             ae.initCause(e);
             throw ae;
         }
     }
 
     /**
-     * Test that the JNDI factory method returns two different
-     * connections if called multiple times with the same name
+     * Test that the JNDI factory method returns the same
+     * data source if called multiple times with the same name
      */
     @Test
     public void jndiConstructorMultipleConnectionTest() {
 
         try {
-            Connection con1 = ConnectionFactory.getConnection(JNDI_NAME);
-            Connection con2 = ConnectionFactory.getConnection(JNDI_NAME);
+            DataSource ds1 = DataSourceFactory.getDataSource(JNDI_NAME);
+            DataSource ds2 = DataSourceFactory.getDataSource(JNDI_NAME);
 
-            String error = "The DB connection 1 is null";
-            assertThat(error, con1, notNullValue());
+            String error = "The data source 1 is null";
+            assertThat(error, ds1, notNullValue());
 
-            error = "The DB connection 2 is null";
-            assertThat(error, con2, notNullValue());
+            error = "The data source 2 is null";
+            assertThat(error, ds2, notNullValue());
 
-            error = "The DB connection 2 is equal to DB connection 1";
-            assertThat(error, con2, is(not(equalTo(con1))));
+            error = "The data source 2 is not equal to data source 1";
+            assertThat(error, ds2, is(equalTo(ds1)));
 
-            // the pool supports only 2 connections (see JNDI_MAX_CONNECTIONS)
-            // get access to the pool, and check that there are two active connections
-            Context context = new InitialContext();
-            DataSource dataSource = (DataSource) context.lookup(JNDI_NAME);
-            context.close();
-            JdbcConnectionPool pool = (JdbcConnectionPool) dataSource;
-
-            error = "Number of active connections in pool (" + pool.getActiveConnections() + ") does not match expectations (2)";
-            assertThat(error, pool.getActiveConnections(), is(equalTo(2)));
-
-            // close one connection and check again
-            con2.close();
-
-            error = "Number of active connections in pool (" + pool.getActiveConnections() + ") does not match expectations (1)";
-            assertThat(error, pool.getActiveConnections(), is(equalTo(1)));
-
-            // close the last connection
-            con1.close();
-            error = "Number of active connections in pool (" + pool.getActiveConnections() + ") does not match expectations (0)";
-            assertThat(error, pool.getActiveConnections(), is(equalTo(0)));
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
-            ae.initCause(e);
-            throw ae;
-        } catch (NamingException e) {
-            AssertionError ae = new AssertionError("Context lookup error");
-            ae.initCause(e);
-            throw ae;
-        } catch (SQLException e) {
-            AssertionError ae = new AssertionError("Error closing the connection");
             ae.initCause(e);
             throw ae;
         }

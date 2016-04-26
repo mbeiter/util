@@ -40,13 +40,15 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class ConnectionFactoryDirectTest {
+public class DataSourceFactoryDirectTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionFactory.class);
 
@@ -107,7 +109,7 @@ public class ConnectionFactoryDirectTest {
         connProps.setPassword(PASSWORD);
 
         try {
-            ConnectionFactory.getConnection(connProps);
+            DataSourceFactory.getDataSource(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -130,7 +132,7 @@ public class ConnectionFactoryDirectTest {
         connProps.setPassword(PASSWORD);
 
         try {
-            ConnectionFactory.getConnection(connProps);
+            DataSourceFactory.getDataSource(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -147,9 +149,9 @@ public class ConnectionFactoryDirectTest {
     public void directConstructorNullconnPropsTest() {
 
         ConnectionProperties connProps = null;
-
+        
         try {
-            ConnectionFactory.getConnection(connProps);
+            DataSourceFactory.getDataSource(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -172,7 +174,7 @@ public class ConnectionFactoryDirectTest {
         connProps.setPassword(PASSWORD);
 
         try {
-            ConnectionFactory.getConnection(connProps);
+            DataSourceFactory.getDataSource(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -195,7 +197,7 @@ public class ConnectionFactoryDirectTest {
         connProps.setPassword(PASSWORD);
 
         try {
-            ConnectionFactory.getConnection(connProps);
+            DataSourceFactory.getDataSource(connProps);
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
@@ -218,11 +220,11 @@ public class ConnectionFactoryDirectTest {
         connProps.setUsername(USER);
         connProps.setPassword(PASSWORD);
 
-        ConnectionFactory.getConnection(connProps);
+        DataSourceFactory.getDataSource(connProps);
     }
 
     /**
-     * Test that the direct factory method returns a connection
+     * Test that the direct factory method returns a data source
      */
     @Test
     public void directConstructorConnectionTest() {
@@ -234,25 +236,20 @@ public class ConnectionFactoryDirectTest {
         connProps.setPassword(PASSWORD);
 
         try {
-            Connection con = ConnectionFactory.getConnection(connProps);
+            DataSource ds = DataSourceFactory.getDataSource(connProps);
 
-            String error = "The DB connection is null";
-            assertThat(error, con, notNullValue());
+            String error = "The data source is null";
+            assertThat(error, ds, notNullValue());
 
-            con.close();
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
-            ae.initCause(e);
-            throw ae;
-        } catch (SQLException e) {
-            AssertionError ae = new AssertionError("Error closing the connection");
             ae.initCause(e);
             throw ae;
         }
     }
 
     /**
-     * Test that the direct factory method returns two different connections
+     * Test that the direct factory method returns the same data source
      * if called multiple times with the same pool properties
      */
     @Test
@@ -263,98 +260,27 @@ public class ConnectionFactoryDirectTest {
         connProps.setUrl(URL);
         connProps.setUsername(USER);
         connProps.setPassword(PASSWORD);
-
+        
         connProps.setMaxTotal(POOL_MAX_CONNECTIONS);
         connProps.setMaxWaitMillis(0); // fail with an exception if no connections are available in the pool
 
         try {
-            Connection con1 = ConnectionFactory.getConnection(connProps);
-            Connection con2 = ConnectionFactory.getConnection(connProps);
+            DataSource ds1 = DataSourceFactory.getDataSource(connProps);
+            DataSource ds2 = DataSourceFactory.getDataSource(connProps);
 
-            String error = "The DB connection 1 is null";
-            assertThat(error, con1, notNullValue());
+            String error = "The data source 1 is null";
+            assertThat(error, ds1, notNullValue());
 
-            error = "The DB connection 2 is null";
-            assertThat(error, con2, notNullValue());
+            error = "The data source 2 is null";
+            assertThat(error, ds2, notNullValue());
 
-            error = "The DB connection 2 is equal to DB connection 1";
-            assertThat(error, con2, is(not(equalTo(con1))));
-
-            con1.close();
-            con2.close();
+            error = "The data source 2 is not equal to data source 1";
+            assertThat(error, ds2, is(equalTo(ds1)));
 
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");
             ae.initCause(e);
             throw ae;
-        } catch (SQLException e) {
-            AssertionError ae = new AssertionError("Error closing the connection");
-            ae.initCause(e);
-            throw ae;
-        }
-    }
-
-    /**
-     * Test that the direct factory method does not return more connections than are available in the pool
-     * <p>
-     * Note that this test is prone to resource leaks und certain conditions, which result in the borrowed connections
-     * not being properly returned to the pool. This is still okay for the unit tests, because the in-memory DB server
-     * used for the tests is destroyed after the tests are complete.
-     *
-     * @throws FactoryException When the instantiation of the connections does not work (expected)
-     * @throws SQLException     When the connections cannot be closed
-     */
-    @Test(expected = FactoryException.class)
-    public void directConstructorMultipleConnectionExhaustedPoolTest()
-            throws FactoryException, SQLException {
-
-        ConnectionProperties connProps = MapBasedConnPropsBuilder.buildDefault();
-        connProps.setDriver(DRIVER);
-        connProps.setUrl(URL);
-        connProps.setUsername(USER);
-        connProps.setPassword(PASSWORD);
-
-        connProps.setMaxTotal(POOL_MAX_CONNECTIONS);
-        connProps.setMaxWaitMillis(0); // fail with an exception if no connections are available in the pool
-
-        Connection con1 = null;
-        Connection con2 = null;
-        Connection con3 = null;
-        try {
-            con1 = ConnectionFactory.getConnection(connProps);
-            con2 = ConnectionFactory.getConnection(connProps);
-
-            String error = "The DB connection 1 is null";
-            assertThat(error, con1, notNullValue());
-
-            error = "The DB connection 2 is null";
-            assertThat(error, con2, notNullValue());
-
-            error = "The DB connection 2 is equal to DB connection 1";
-            assertThat(error, con2, is(not(equalTo(con1))));
-
-            // the pool supports only 2 connections (see JNDI_MAX_CONNECTIONS)
-            // borrowing a third connection will result in a FactoryException because the pool is exhausted
-            con3 = ConnectionFactory.getConnection(connProps);
-        } finally {
-
-            if (con1 != null) {
-                LOG.debug("closing connection 'con1'");
-                con1.close();
-                LOG.debug("'con1' has been closed");
-            }
-
-            if (con2 != null) {
-                LOG.debug("closing connection 'con2'");
-                con2.close();
-                LOG.debug("'con2' has been closed");
-            }
-
-            if (con3 != null) {
-                LOG.debug("closing connection 'con3'");
-                con3.close();
-                LOG.debug("'con3' has been closed");
-            }
         }
     }
 }
