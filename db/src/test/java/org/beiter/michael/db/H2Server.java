@@ -110,7 +110,7 @@ public class H2Server {
         }
 
         con.close();
-        cp.dispose();
+        //cp.dispose(); // Closing the last connection to an H2 database destroys it. Hence, do not dispose the pool!
     }
 
     /**
@@ -164,7 +164,7 @@ public class H2Server {
         JdbcConnectionPool cp = JdbcConnectionPool.create(URL, USER, PASSWORD);
         Connection conn = cp.getConnection();
         conn.close();
-        cp.dispose();
+        //cp.dispose(); // Closing the last connection to an H2 database destroys it. Hence, do not dispose the pool!
     }
 
     /**
