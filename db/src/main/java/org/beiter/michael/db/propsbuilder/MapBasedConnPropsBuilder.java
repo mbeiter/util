@@ -604,8 +604,9 @@ public final class MapBasedConnPropsBuilder {
 
         // set the additional properties, preserving the originally provided properties
         // create a defensive copy of the map and all its properties
-        // the code looks a little complicated that "putAll()", but it catches situations where a Map is provided that
-        // supports null values (e.g. a HashMap) vs Map implementations that do not (e.g. ConcurrentHashMap).
+        // the code looks a little more complicated than a simple "putAll()", but it catches situations
+        // where a Map is provided that supports null values (e.g. a HashMap) vs Map implementations
+        // that do not (e.g. ConcurrentHashMap).
         final Map<String, String> tempMap = new ConcurrentHashMap<>();
         for (final Map.Entry<String, String> entry : properties.entrySet()) {
             final String key = entry.getKey();
