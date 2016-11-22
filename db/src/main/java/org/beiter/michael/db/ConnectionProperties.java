@@ -866,7 +866,7 @@ public class ConnectionProperties {
             return new ConcurrentHashMap<>();
         } else {
             final Map<String, String> tempMap = new ConcurrentHashMap<>();
-            // putAll() is safe here, because we allways apply it on a ConcurrentHashMap()
+            // putAll() is safe here, because we always apply it on a ConcurrentHashMap()
             tempMap.putAll(additionalProperties);
 
             return tempMap;
