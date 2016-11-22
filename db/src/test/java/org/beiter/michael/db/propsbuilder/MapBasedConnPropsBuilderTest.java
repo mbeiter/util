@@ -638,17 +638,17 @@ public class MapBasedConnPropsBuilderTest {
 
         Map<String, String> map = new HashMap<>();
 
-        map.put(MapBasedConnPropsBuilder.KEY_NUM_TESTS_PER_EVICITON_RUN, null);
+        map.put(MapBasedConnPropsBuilder.KEY_NUM_TESTS_PER_EVICTION_RUN, null);
         ConnectionProperties connProps = MapBasedConnPropsBuilder.build(map);
         String error = "numTestsPerEvictionRun does not match expected default value";
         assertThat(error, connProps.getNumTestsPerEvictionRun(), is(equalTo(3)));
 
-        map.put(MapBasedConnPropsBuilder.KEY_NUM_TESTS_PER_EVICITON_RUN, "asdf");
+        map.put(MapBasedConnPropsBuilder.KEY_NUM_TESTS_PER_EVICTION_RUN, "asdf");
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "numTestsPerEvictionRun does not match expected value";
         assertThat(error, connProps.getNumTestsPerEvictionRun(), is(equalTo(3)));
 
-        map.put(MapBasedConnPropsBuilder.KEY_NUM_TESTS_PER_EVICITON_RUN, "42");
+        map.put(MapBasedConnPropsBuilder.KEY_NUM_TESTS_PER_EVICTION_RUN, "42");
         connProps = MapBasedConnPropsBuilder.build(map);
         error = "numTestsPerEvictionRun does not match expected value";
         assertThat(error, connProps.getNumTestsPerEvictionRun(), is(equalTo(42)));

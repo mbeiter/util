@@ -254,7 +254,7 @@ public final class MapBasedConnPropsBuilder {
     /**
      * @see ConnectionProperties#setNumTestsPerEvictionRun(int)
      */
-    public static final String KEY_NUM_TESTS_PER_EVICITON_RUN = "jdbc.connection.numTestsPerEvictionRun";
+    public static final String KEY_NUM_TESTS_PER_EVICTION_RUN = "jdbc.connection.numTestsPerEvictionRun";
 
     /**
      * @see ConnectionProperties#setMinEvictableIdleTimeMillis(long)
@@ -481,19 +481,19 @@ public final class MapBasedConnPropsBuilder {
                     String.valueOf(DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
         }
 
-        tmp = properties.get(KEY_NUM_TESTS_PER_EVICITON_RUN);
+        tmp = properties.get(KEY_NUM_TESTS_PER_EVICTION_RUN);
         if (StringUtils.isNotEmpty(tmp)) {
             if (StringUtils.isNumeric(tmp)) {
                 connProps.setNumTestsPerEvictionRun(Integer.decode(tmp));
-                logValue(KEY_NUM_TESTS_PER_EVICITON_RUN, tmp);
+                logValue(KEY_NUM_TESTS_PER_EVICTION_RUN, tmp);
             } else {
                 connProps.setNumTestsPerEvictionRun(DEFAULT_NUM_TESTS_PER_EVICITON_RUN);
-                logDefault(KEY_NUM_TESTS_PER_EVICITON_RUN, tmp, "not numeric",
+                logDefault(KEY_NUM_TESTS_PER_EVICTION_RUN, tmp, "not numeric",
                         String.valueOf(DEFAULT_NUM_TESTS_PER_EVICITON_RUN));
             }
         } else {
             connProps.setNumTestsPerEvictionRun(DEFAULT_NUM_TESTS_PER_EVICITON_RUN);
-            logDefault(KEY_NUM_TESTS_PER_EVICITON_RUN, String.valueOf(DEFAULT_NUM_TESTS_PER_EVICITON_RUN));
+            logDefault(KEY_NUM_TESTS_PER_EVICTION_RUN, String.valueOf(DEFAULT_NUM_TESTS_PER_EVICITON_RUN));
         }
 
         tmp = properties.get(KEY_MIN_EVICTABLE_IDLE_TIME_MILLIS);
