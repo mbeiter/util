@@ -43,9 +43,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 public class DataSourceFactoryJndiTest {
@@ -185,8 +185,8 @@ public class DataSourceFactoryJndiTest {
             error = "The data source 2 is null";
             assertThat(error, ds2, notNullValue());
 
-            error = "The data source 2 is not equal to data source 1";
-            assertThat(error, ds2, is(equalTo(ds1)));
+            error = "The data source 2 is not the same instance as data source 1";
+            assertThat(error, ds2, is(sameInstance(ds1)));
 
         } catch (FactoryException e) {
             AssertionError ae = new AssertionError("Factory error");

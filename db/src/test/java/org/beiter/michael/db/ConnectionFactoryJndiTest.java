@@ -193,8 +193,8 @@ public class ConnectionFactoryJndiTest {
             error = "The DB connection 2 is null";
             assertThat(error, con2, notNullValue());
 
-            error = "The DB connection 2 is equal to DB connection 1";
-            assertThat(error, con2, is(not(equalTo(con1))));
+            error = "The DB connection 2 is same instance as DB connection 1";
+            assertThat(error, con2, is(not(sameInstance(con1))));
 
             // the pool supports only 2 connections (see JNDI_MAX_CONNECTIONS)
             // get access to the pool, and check that there are two active connections
