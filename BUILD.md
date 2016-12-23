@@ -30,7 +30,7 @@ Checkout the master branch from GitHub to a first directory:
 
 or
 
-	git clone https://github.com/mbeiter/util.git
+    git clone https://github.com/mbeiter/util.git
 
 Checkout the master branch from GitHub to a second directory (optional, but handy to modify the GitHub pages without 
 switching branches):
@@ -39,7 +39,7 @@ switching branches):
 
 or
 
-	git clone https://github.com/mbeiter/util.git util-site -b gh-pages
+    git clone https://github.com/mbeiter/util.git util-site -b gh-pages
 
 For first-time git users: configure a default identity for git (stored in ~/.gitconfig):
 
